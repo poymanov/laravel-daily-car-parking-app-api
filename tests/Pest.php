@@ -11,6 +11,9 @@
 |
 */
 
+use Tests\Helpers\ModelBuilderHelper;
+use Tests\Helpers\RouteBuilderHelper;
+
 uses(
     Tests\TestCase::class,
     // Illuminate\Foundation\Testing\RefreshDatabase::class,
@@ -27,9 +30,7 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,18 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * @return ModelBuilderHelper
+ */
+function modelBuilderHelper(): ModelBuilderHelper
 {
-    // ..
+    return ModelBuilderHelper::getInstance();
+}
+
+/**
+ * @return RouteBuilderHelper
+ */
+function routeBuilderHelper(): RouteBuilderHelper
+{
+    return RouteBuilderHelper::getInstance();
 }
