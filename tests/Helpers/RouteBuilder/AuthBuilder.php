@@ -11,4 +11,12 @@ class AuthBuilder
     {
         return '/api/v1/auth/register';
     }
+
+    /**
+     * @return string
+     */
+    public function login(): string
+    {
+        return '/api/v1/auth/login';
+    }
 }

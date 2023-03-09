@@ -5,7 +5,9 @@ namespace App\Services\User\Contracts;
 use App\Models\User;
 use App\Services\User\Dtos\CreateUserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
-use App\Services\User\Exceptions\UserNotFoundException;
+use App\Services\User\Exceptions\UserNotFoundByEmailException;
+use App\Services\User\Exceptions\UserNotFoundByIdException;
+use Carbon\Carbon;
 
 interface UserServiceContract
 {
@@ -20,21 +22,28 @@ interface UserServiceContract
     public function create(CreateUserDto $createUserDto): int;
 
     /**
-     * Создание токена авторизации пользователя
-     *
-     * @param int         $id
-     * @param string|null $deviceName
-     *
-     * @return string
-     * @throws UserNotFoundException
-     */
-    public function createAccessToken(int $id, ?string $deviceName): string;
-
-    /**
      * @param int $id
      *
      * @return User
-     * @throws UserNotFoundException
+     * @throws UserNotFoundByIdException
      */
     public function getOneModelById(int $id): User;
+
+    /**
+     * @param string $email
+     *
+     * @return User
+     * @throws UserNotFoundByEmailException
+     */
+    public function getOneModelByEmail(string $email): User;
+
+    /**
+     * @param int         $id
+     * @param string|null $deviceName
+     * @param Carbon|null $expiredAt
+     *
+     * @return string
+     * @throws UserNotFoundByIdException
+     */
+    public function createAccessToken(int $id, ?string $deviceName, ?Carbon $expiredAt): string;
 }

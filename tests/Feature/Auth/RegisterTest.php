@@ -57,4 +57,8 @@ test('success', function () {
     $response->assertJsonStructure(['access_token']);
 
     $this->assertDatabaseHas('users', ['name' => $name, 'email' => $email]);
+
+    $this->assertDatabaseCount('personal_access_tokens', 1);
+
+    $this->assertDatabaseMissing('personal_access_tokens', ['expires_at' => null]);
 });

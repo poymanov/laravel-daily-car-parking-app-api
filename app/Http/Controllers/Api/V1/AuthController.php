@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Services\Auth\Contracts\AuthDataDtoFactoryContract;
+use App\Services\Auth\Contracts\AuthServiceContract;
 use App\Services\User\Contracts\CreateUserDtoFactoryContract;
-use App\Services\User\Contracts\UserServiceContract;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -15,8 +16,9 @@ use Throwable;
 class AuthController extends Controller
 {
     public function __construct(
-        private readonly UserServiceContract $userService,
-        private readonly CreateUserDtoFactoryContract $createUserDtoFactory
+        private readonly CreateUserDtoFactoryContract $createUserDtoFactory,
+        private readonly AuthDataDtoFactoryContract $authDataDtoFactory,
+        private readonly AuthServiceContract $authService
     ) {
     }
 
@@ -26,7 +28,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws Throwable
      * @throws \App\Services\User\Exceptions\CreateUserFailedException
-     * @throws \App\Services\User\Exceptions\UserNotFoundException
+     * @throws \App\Services\User\Exceptions\UserNotFoundByIdException
      */
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -37,13 +39,37 @@ class AuthController extends Controller
                 $request->get('password')
             );
 
-            $createdUserId = $this->userService->create($createUserDto);
+            $accessToken = $this->authService->register($createUserDto, $request->userAgent());
 
-            $user = $this->userService->getOneModelById($createdUserId);
+            return response()->json([
+                'access_token' => $accessToken,
+            ], Response::HTTP_CREATED);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
 
-            event(new Registered($user));
+    /**
+     * @param LoginRequest $request
+     *
+     * @return JsonResponse
+     * @throws Throwable
+     * @throws \App\Services\Auth\Exceptions\CredentionalsIncorrectException
+     * @throws \App\Services\User\Exceptions\UserNotFoundByEmailException
+     * @throws \App\Services\User\Exceptions\UserNotFoundByIdException
+     */
+    public function login(LoginRequest $request): JsonResponse
+    {
+        try {
+            $authDataDto = $this->authDataDtoFactory->createFromParams(
+                $request->get('email'),
+                $request->get('password'),
+                $request->exists('remember'),
+                $request->userAgent()
+            );
 
-            $accessToken = $this->userService->createAccessToken($createdUserId, $request->userAgent());
+            $accessToken = $this->authService->login($authDataDto);
 
             return response()->json([
                 'access_token' => $accessToken,

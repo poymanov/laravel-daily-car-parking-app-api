@@ -9,11 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class CreateUserDtoFactory implements CreateUserDtoFactoryContract
 {
     /**
-     * @param string $name
-     * @param string $email
-     * @param string $password
-     *
-     * @return CreateUserDto
+     * @inheritDoc
      */
     public function createFromParams(string $name, string $email, string $password): CreateUserDto
     {

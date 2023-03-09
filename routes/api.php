@@ -20,4 +20,5 @@ Route::group([
     'controller' => AuthController::class,
 ], function () {
     Route::post('register', 'register')->name('register');
+    Route::post('login', 'login')->name('login');
 });
