@@ -9,8 +9,10 @@ use App\Services\Auth\Contracts\AuthDataDtoFactoryContract;
 use App\Services\Auth\Contracts\AuthServiceContract;
 use App\Services\User\Contracts\CreateUserDtoFactoryContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 
 class AuthController extends Controller
@@ -74,6 +76,29 @@ class AuthController extends Controller
             return response()->json([
                 'access_token' => $accessToken,
             ], Response::HTTP_CREATED);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     * @throws Throwable
+     * @throws \App\Services\User\Exceptions\UserNotFoundByIdException
+     */
+    public function logout(Request $request)
+    {
+        try {
+            if (is_null($request->user())) {
+                throw new BadRequestHttpException('Auth user not found');
+            }
+
+            $this->authService->logout($request->user()->id);
+
+            return response()->noContent();
         } catch (Throwable $e) {
             Log::error($e->getMessage());
             throw $e;

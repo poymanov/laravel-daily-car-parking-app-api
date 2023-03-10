@@ -46,6 +46,16 @@ class UserRepository implements UserRepositoryContract
     /**
      * @inheritDoc
      */
+    public function deleteAccessTokens(int $id): void
+    {
+        $user = $this->getOneModelById($id);
+
+        $user->tokens()->delete();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getOneModelById(int $id): User
     {
         $user = User::find($id);

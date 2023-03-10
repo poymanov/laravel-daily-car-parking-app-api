@@ -21,4 +21,5 @@ Route::group([
 ], function () {
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
+    Route::post('logout', 'logout')->middleware('auth:sanctum')->name('logout');
 });

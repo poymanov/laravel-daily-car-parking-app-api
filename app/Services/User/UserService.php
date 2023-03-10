@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Services\User\Contracts\UserRepositoryContract;
 use App\Services\User\Contracts\UserServiceContract;
 use App\Services\User\Dtos\CreateUserDto;
-use App\Services\User\Exceptions\UserNotFoundByIdException;
 use Carbon\Carbon;
 
 class UserService implements UserServiceContract
@@ -40,16 +39,20 @@ class UserService implements UserServiceContract
     }
 
     /**
-     * @param int         $id
-     * @param string|null $deviceName
-     *
-     * @return string
-     * @throws UserNotFoundByIdException
+     * @inheritDoc
      */
     public function createAccessToken(int $id, ?string $deviceName, ?Carbon $expiredAt): string
     {
         $deviceName = substr($deviceName ?? '', 0, 255);
 
         return $this->userRepository->createAccessToken($id, $deviceName, $expiredAt);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteAccessTokens(int $id): void
+    {
+        $this->userRepository->deleteAccessTokens($id);
     }
 }

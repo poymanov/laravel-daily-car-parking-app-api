@@ -64,6 +64,17 @@ class AuthService implements AuthServiceContract
     }
 
     /**
+     * @param int $userId
+     *
+     * @return void
+     * @throws UserNotFoundByIdException
+     */
+    public function logout(int $userId): void
+    {
+        $this->userService->deleteAccessTokens($userId);
+    }
+
+    /**
      * @return Carbon
      */
     private function getTokenExpiresDate(): Carbon

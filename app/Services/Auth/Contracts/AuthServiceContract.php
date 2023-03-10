@@ -30,4 +30,12 @@ interface AuthServiceContract
      * @throws UserNotFoundByEmailException
      */
     public function login(AuthDataDto $authUserDto): string;
+
+    /**
+     * @param int $userId
+     *
+     * @return void
+     * @throws UserNotFoundByIdException
+     */
+    public function logout(int $userId): void;
 }

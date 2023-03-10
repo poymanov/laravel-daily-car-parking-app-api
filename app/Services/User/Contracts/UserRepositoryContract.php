@@ -34,6 +34,16 @@ interface UserRepositoryContract
     public function createAccessToken(int $id, string $deviceName, ?Carbon $expiredAt): string;
 
     /**
+     * Удаление авторизационных токенов пользователей
+     *
+     * @param int $id
+     *
+     * @return void
+     * @throws UserNotFoundByIdException
+     */
+    public function deleteAccessTokens(int $id): void;
+
+    /**
      * @param int $id
      *
      * @return User
