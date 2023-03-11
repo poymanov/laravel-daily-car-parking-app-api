@@ -4,6 +4,7 @@ namespace App\Services\User\Contracts;
 
 use App\Models\User;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
@@ -22,6 +23,8 @@ interface UserServiceContract
     public function create(CreateUserDto $createUserDto): int;
 
     /**
+     * Получение пользователя по ID в виде объекта модели
+     *
      * @param int $id
      *
      * @return User
@@ -36,6 +39,16 @@ interface UserServiceContract
      * @throws UserNotFoundByEmailException
      */
     public function getOneModelByEmail(string $email): User;
+
+    /**
+     * Получение пользователя по ID в виде объекта Dto
+     *
+     * @param int $id
+     *
+     * @return UserDto
+     * @throws UserNotFoundByIdException
+     */
+    public function getOneById(int $id): UserDto;
 
     /**
      * @param int         $id

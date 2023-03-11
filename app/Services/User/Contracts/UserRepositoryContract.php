@@ -4,6 +4,7 @@ namespace App\Services\User\Contracts;
 
 use App\Models\User;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
@@ -44,12 +45,24 @@ interface UserRepositoryContract
     public function deleteAccessTokens(int $id): void;
 
     /**
+     * Получение пользователя по ID в виде объекта модели
+     *
      * @param int $id
      *
      * @return User
      * @throws UserNotFoundByIdException
      */
     public function getOneModelById(int $id): User;
+
+    /**
+     * Получение пользователя по ID в виде объекта Dto
+     *
+     * @param int $id
+     *
+     * @return UserDto
+     * @throws UserNotFoundByIdException
+     */
+    public function getOneById(int $id): UserDto;
 
     /**
      * @param string $email

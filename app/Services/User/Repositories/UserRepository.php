@@ -3,8 +3,10 @@
 namespace App\Services\User\Repositories;
 
 use App\Models\User;
+use App\Services\User\Contracts\UserDtoFactoryContract;
 use App\Services\User\Contracts\UserRepositoryContract;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
@@ -12,7 +14,7 @@ use Carbon\Carbon;
 
 class UserRepository implements UserRepositoryContract
 {
-    public function __construct()
+    public function __construct(private readonly UserDtoFactoryContract $userDtoFactory)
     {
     }
 
@@ -65,6 +67,16 @@ class UserRepository implements UserRepositoryContract
         }
 
         return $user;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOneById(int $id): UserDto
+    {
+        $user = $this->getOneModelById($id);
+
+        return $this->userDtoFactory->createFromModel($user);
     }
 
     /**

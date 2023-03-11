@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\User\Contracts\UserRepositoryContract;
 use App\Services\User\Contracts\UserServiceContract;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UserDto;
 use Carbon\Carbon;
 
 class UserService implements UserServiceContract
@@ -36,6 +37,14 @@ class UserService implements UserServiceContract
     public function getOneModelByEmail(string $email): User
     {
         return $this->userRepository->getOneModelByEmail($email);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOneById(int $id): UserDto
+    {
+        return $this->userRepository->getOneById($id);
     }
 
     /**

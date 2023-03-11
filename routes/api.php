@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +23,13 @@ Route::group([
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
     Route::post('logout', 'logout')->middleware('auth:sanctum')->name('logout');
+});
+
+Route::group([
+    'prefix'     => 'v1/profile',
+    'as'         => 'profile.',
+    'controller' => ProfileController::class,
+    'middleware' => 'auth:sanctum',
+], function () {
+    Route::get('', 'show')->name('show');
 });

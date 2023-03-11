@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 
 class AuthController extends Controller
@@ -92,11 +91,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            if (is_null($request->user())) {
-                throw new BadRequestHttpException('Auth user not found');
-            }
+            $authUserId = $this->getAuthUserId($request);
 
-            $this->authService->logout($request->user()->id);
+            $this->authService->logout($authUserId);
 
             return response()->noContent();
         } catch (Throwable $e) {

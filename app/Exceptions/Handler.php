@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -57,9 +58,23 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson() && !$e instanceof ValidationException) {
             return response()->json([
                 'message' => $e->getMessage(),
-            ], Response::HTTP_BAD_REQUEST);
+            ], $this->getExceptionHTTPStatus($e));
         }
 
         return parent::render($request, $e);
+    }
+
+    /**
+     * Получение корректного HTTP-статуса для исключения
+     *
+     * @param Throwable $e
+     * @return int
+     */
+    private function getExceptionHTTPStatus(Throwable $e): int
+    {
+        return match (true) {
+            $e instanceof AuthenticationException => Response::HTTP_FORBIDDEN,
+            default => Response::HTTP_BAD_REQUEST
+        };
     }
 }

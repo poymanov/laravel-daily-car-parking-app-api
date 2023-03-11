@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
@@ -10,7 +9,7 @@ uses(RefreshDatabase::class);
  * Попытка завершения сеанса гостем
  */
 test('guest', function () {
-    $response = $this->postJson(routeBuilderHelper()->auth->logout());
+    $response = $this->getJson(routeBuilderHelper()->profile->show());
 
     $response->assertForbidden();
 
@@ -18,22 +17,16 @@ test('guest', function () {
 });
 
 /**
- * Успешное завершение сеанса
+ * Попытка завершения сеанса гостем
  */
 test('success', function () {
     $user = modelBuilderHelper()->user->create();
 
     Sanctum::actingAs($user);
 
-    $response = $this->postJson(routeBuilderHelper()->auth->logout());
+    $response = $this->getJson(routeBuilderHelper()->profile->show());
 
-    $response->assertNoContent();
+    $response->assertOk();
 
-    $this->assertDatabaseMissing(
-        'personal_access_tokens',
-        [
-            'tokenable_type' => User::class,
-            'tokenable_id'   => $user->id,
-        ]
-    );
+    $response->assertJsonFragment(['id' => $user->id, 'name' => $user->name, 'email' => $user->email]);
 });
