@@ -4,8 +4,10 @@ namespace App\Services\User\Contracts;
 
 use App\Models\User;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
+use App\Services\User\Exceptions\UpdateUserFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
 use Carbon\Carbon;
@@ -21,6 +23,16 @@ interface UserServiceContract
      * @throws CreateUserFailedException
      */
     public function create(CreateUserDto $createUserDto): int;
+
+    /**
+     * @param int           $id
+     * @param UpdateUserDto $updateUserDto
+     *
+     * @return void
+     * @throws UpdateUserFailedException
+     * @throws UserNotFoundByIdException
+     */
+    public function update(int $id, UpdateUserDto $updateUserDto): void;
 
     /**
      * Получение пользователя по ID в виде объекта модели

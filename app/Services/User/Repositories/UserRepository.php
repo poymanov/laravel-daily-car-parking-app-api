@@ -6,8 +6,10 @@ use App\Models\User;
 use App\Services\User\Contracts\UserDtoFactoryContract;
 use App\Services\User\Contracts\UserRepositoryContract;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
+use App\Services\User\Exceptions\UpdateUserFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
 use Carbon\Carbon;
@@ -33,6 +35,25 @@ class UserRepository implements UserRepositoryContract
         }
 
         return $user->id;
+    }
+
+    /**
+     * @param int           $id
+     * @param UpdateUserDto $updateUserDto
+     *
+     * @return void
+     * @throws UpdateUserFailedException
+     * @throws UserNotFoundByIdException
+     */
+    public function update(int $id, UpdateUserDto $updateUserDto): void
+    {
+        $user = $this->getOneModelById($id);
+        $user->name = $updateUserDto->name;
+        $user->email = $updateUserDto->email;
+
+        if (!$user->save()) {
+            throw new UpdateUserFailedException($id);
+        }
     }
 
     /**

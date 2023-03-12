@@ -32,4 +32,5 @@ Route::group([
     'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('', 'show')->name('show');
+    Route::patch('', 'update')->name('update');
 });

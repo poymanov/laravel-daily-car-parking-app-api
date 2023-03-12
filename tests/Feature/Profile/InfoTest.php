@@ -6,7 +6,7 @@ use Laravel\Sanctum\Sanctum;
 uses(RefreshDatabase::class);
 
 /**
- * Попытка завершения сеанса гостем
+ * Попытка получения данных гостем
  */
 test('guest', function () {
     $response = $this->getJson(routeBuilderHelper()->profile->show());
@@ -17,7 +17,7 @@ test('guest', function () {
 });
 
 /**
- * Попытка завершения сеанса гостем
+ * Успешное получение данных
  */
 test('success', function () {
     $user = modelBuilderHelper()->user->create();

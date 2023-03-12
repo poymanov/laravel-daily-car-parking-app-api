@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\User\Contracts\UserRepositoryContract;
 use App\Services\User\Contracts\UserServiceContract;
 use App\Services\User\Dtos\CreateUserDto;
+use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use Carbon\Carbon;
 
@@ -21,6 +22,14 @@ class UserService implements UserServiceContract
     public function create(CreateUserDto $createUserDto): int
     {
         return $this->userRepository->create($createUserDto);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(int $id, UpdateUserDto $updateUserDto): void
+    {
+        $this->userRepository->update($id, $updateUserDto);
     }
 
     /**
