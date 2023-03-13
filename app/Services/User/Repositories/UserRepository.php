@@ -10,6 +10,7 @@ use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
 use App\Services\User\Exceptions\UpdateUserFailedException;
+use App\Services\User\Exceptions\UpdateUserPasswordFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
 use Carbon\Carbon;
@@ -53,6 +54,24 @@ class UserRepository implements UserRepositoryContract
 
         if (!$user->save()) {
             throw new UpdateUserFailedException($id);
+        }
+    }
+
+    /**
+     * @param int    $id
+     * @param string $passwordHash
+     *
+     * @return void
+     * @throws UpdateUserPasswordFailedException
+     * @throws UserNotFoundByIdException
+     */
+    public function updatePassword(int $id, string $passwordHash): void
+    {
+        $user = $this->getOneModelById($id);
+        $user->password = $passwordHash;
+
+        if (!$user->save()) {
+            throw new UpdateUserPasswordFailedException($id);
         }
     }
 

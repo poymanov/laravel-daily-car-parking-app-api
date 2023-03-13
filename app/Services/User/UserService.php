@@ -9,6 +9,7 @@ use App\Services\User\Dtos\CreateUserDto;
 use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class UserService implements UserServiceContract
 {
@@ -30,6 +31,16 @@ class UserService implements UserServiceContract
     public function update(int $id, UpdateUserDto $updateUserDto): void
     {
         $this->userRepository->update($id, $updateUserDto);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updatePassword(int $id, string $password): void
+    {
+        $passwordHash = Hash::make($password);
+
+        $this->userRepository->updatePassword($id, $passwordHash);
     }
 
     /**

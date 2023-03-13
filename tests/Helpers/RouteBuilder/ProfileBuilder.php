@@ -19,4 +19,12 @@ class ProfileBuilder
     {
         return '/api/v1/profile';
     }
+
+    /**
+     * @return string
+     */
+    public function updatePassword(): string
+    {
+        return '/api/v1/profile/password';
+    }
 }

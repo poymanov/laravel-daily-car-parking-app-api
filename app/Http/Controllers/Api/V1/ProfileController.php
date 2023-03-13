@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Profile\UpdatePasswordRequest;
 use App\Http\Requests\Profile\UpdateRequest;
 use App\Services\User\Contracts\UpdateUserDtoFactoryContract;
 use App\Services\User\Contracts\UpdateUserDtoFormatterContract;
@@ -10,6 +11,7 @@ use App\Services\User\Contracts\UserDtoFormatterContract;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -69,6 +71,28 @@ class ProfileController extends Controller
             $updateUserDtoFormatted = $this->updateUserDtoFormatter->toArray($updateUserDto);
 
             return response()->json($updateUserDtoFormatted);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @param UpdatePasswordRequest $request
+     *
+     * @return Response
+     * @throws Throwable
+     * @throws \App\Services\User\Exceptions\UpdateUserPasswordFailedException
+     * @throws \App\Services\User\Exceptions\UserNotFoundByIdException
+     */
+    public function updatePassword(UpdatePasswordRequest $request): Response
+    {
+        try {
+            $authUserId = $this->getAuthUserId($request);
+
+            $this->userService->updatePassword($authUserId, $request->get('password'));
+
+            return response()->noContent();
         } catch (Throwable $e) {
             Log::error($e->getMessage());
             throw $e;

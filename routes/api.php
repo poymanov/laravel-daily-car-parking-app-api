@@ -33,4 +33,5 @@ Route::group([
 ], function () {
     Route::get('', 'show')->name('show');
     Route::patch('', 'update')->name('update');
+    Route::patch('password', 'updatePassword')->name('updatePassword');
 });

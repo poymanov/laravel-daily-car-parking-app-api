@@ -8,6 +8,7 @@ use App\Services\User\Dtos\UpdateUserDto;
 use App\Services\User\Dtos\UserDto;
 use App\Services\User\Exceptions\CreateUserFailedException;
 use App\Services\User\Exceptions\UpdateUserFailedException;
+use App\Services\User\Exceptions\UpdateUserPasswordFailedException;
 use App\Services\User\Exceptions\UserNotFoundByEmailException;
 use App\Services\User\Exceptions\UserNotFoundByIdException;
 use Carbon\Carbon;
@@ -33,6 +34,16 @@ interface UserServiceContract
      * @throws UserNotFoundByIdException
      */
     public function update(int $id, UpdateUserDto $updateUserDto): void;
+
+    /**
+     * @param int    $id
+     * @param string $password
+     *
+     * @return void
+     * @throws UpdateUserPasswordFailedException
+     * @throws UserNotFoundByIdException
+     */
+    public function updatePassword(int $id, string $password): void;
 
     /**
      * Получение пользователя по ID в виде объекта модели

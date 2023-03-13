@@ -19,6 +19,19 @@ test('guest', function () {
 });
 
 /**
+ * Попытка обновления без указания данных
+ */
+test('empty', function () {
+    Sanctum::actingAs(modelBuilderHelper()->user->create());
+
+    $response = $this->patchJson(routeBuilderHelper()->profile->update());
+
+    $response->assertUnprocessable();
+
+    $response->assertJsonStructure(['message', 'errors' => ['name', 'email']]);
+});
+
+/**
  * Попытка обновления email на уже существующий
  */
 test('not unique email', function () {
