@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,3 +36,5 @@ Route::group([
     Route::patch('', 'update')->name('update');
     Route::patch('password', 'updatePassword')->name('updatePassword');
 });
+
+Route::apiResource('v1/vehicles', VehicleController::class)->middleware('auth:sanctum')->only('store');

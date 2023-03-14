@@ -3,6 +3,7 @@
 namespace Tests\Helpers;
 
 use Tests\Helpers\ModelBuilder\UserBuilder;
+use Tests\Helpers\ModelBuilder\VehicleBuilder;
 
 class ModelBuilderHelper
 {
@@ -10,9 +11,12 @@ class ModelBuilderHelper
 
     public UserBuilder $user;
 
+    public VehicleBuilder $vehicle;
+
     private function __construct()
     {
-        $this->user = new UserBuilder();
+        $this->user    = new UserBuilder();
+        $this->vehicle = new VehicleBuilder();
     }
 
     /**
