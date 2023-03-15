@@ -18,4 +18,18 @@ class VehicleDtoFormatter implements VehicleDtoFormatterContract
             'plate_number' => $dto->plateNumber,
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function fromArrayToArray(array $dtos): array
+    {
+        $result = [];
+
+        foreach ($dtos as $dto) {
+            $result[] = $this->toArray($dto);
+        }
+
+        return $result;
+    }
 }

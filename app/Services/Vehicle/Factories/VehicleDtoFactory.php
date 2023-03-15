@@ -5,6 +5,7 @@ namespace App\Services\Vehicle\Factories;
 use App\Models\Vehicle;
 use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Vehicle\Dtos\VehicleDto;
+use Illuminate\Database\Eloquent\Collection;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class VehicleDtoFactory implements VehicleDtoFactoryContract
@@ -20,5 +21,21 @@ class VehicleDtoFactory implements VehicleDtoFactoryContract
         $vehicleDto->plateNumber = $vehicle->plate_number;
 
         return $vehicleDto;
+    }
+
+    /**
+     * @param Collection $models
+     *
+     * @return VehicleDto[]
+     */
+    public function createFromModels(Collection $models): array
+    {
+        $dtos = [];
+
+        foreach ($models as $model) {
+            $dtos[] = $this->createFromModel($model);
+        }
+
+        return $dtos;
     }
 }

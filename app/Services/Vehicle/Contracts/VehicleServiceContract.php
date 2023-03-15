@@ -15,4 +15,11 @@ interface VehicleServiceContract
      * @throws CreateVehicleFailedException
      */
     public function create(int $userId, string $plateNumber): VehicleDto;
+
+    /**
+     * @param int $userId
+     *
+     * @return VehicleDto[]
+     */
+    public function findAllByUserId(int $userId): array;
 }

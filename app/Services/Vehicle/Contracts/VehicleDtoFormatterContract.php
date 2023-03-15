@@ -12,4 +12,11 @@ interface VehicleDtoFormatterContract
      * @return array
      */
     public function toArray(VehicleDto $dto): array;
+
+    /**
+     * @param VehicleDto[] $dtos
+     *
+     * @return array
+     */
+    public function fromArrayToArray(array $dtos): array;
 }

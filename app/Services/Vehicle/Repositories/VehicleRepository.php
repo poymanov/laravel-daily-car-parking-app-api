@@ -29,4 +29,14 @@ class VehicleRepository implements VehicleRepositoryContract
 
         return $this->vehicleDtoFactory->createFromModel($vehicle);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllByUserId(int $userId): array
+    {
+        $vehicles = Vehicle::whereUserId($userId)->latest()->get();
+
+        return $this->vehicleDtoFactory->createFromModels($vehicles);
+    }
 }
