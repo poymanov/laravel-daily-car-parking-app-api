@@ -7,6 +7,8 @@ use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class VehicleRepository implements VehicleRepositoryContract
 {
@@ -38,5 +40,35 @@ class VehicleRepository implements VehicleRepositoryContract
         $vehicles = Vehicle::whereUserId($userId)->latest()->get();
 
         return $this->vehicleDtoFactory->createFromModels($vehicles);
+    }
+
+    /**
+     * @param Uuid $id
+     *
+     * @return VehicleDto
+     * @throws VehicleNotFoundByIdException
+     */
+    public function getOneById(Uuid $id): VehicleDto
+    {
+        $user = $this->getOneModelById($id);
+
+        return $this->vehicleDtoFactory->createFromModel($user);
+    }
+
+    /**
+     * @param Uuid $id
+     *
+     * @return Vehicle
+     * @throws VehicleNotFoundByIdException
+     */
+    private function getOneModelById(Uuid $id): Vehicle
+    {
+        $user = Vehicle::find($id->value());
+
+        if (is_null($user)) {
+            throw new VehicleNotFoundByIdException($id);
+        }
+
+        return $user;
     }
 }

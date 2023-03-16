@@ -4,6 +4,7 @@ namespace App\Services\Vehicle\Contracts;
 
 use App\Services\Vehicle\Dtos\VehicleDto;
 use Closure;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 interface VehicleCacheServiceContract
 {
@@ -20,5 +21,13 @@ interface VehicleCacheServiceContract
      *
      * @return VehicleDto[]
      */
-    public function rememberAndGetAll(int $userId, Closure $closure): array;
+    public function rememberAndGetAllByUserId(int $userId, Closure $closure): array;
+
+    /**
+     * @param Uuid    $id
+     * @param Closure $closure
+     *
+     * @return VehicleDto
+     */
+    public function rememberAndGetOneById(Uuid $id, Closure $closure): VehicleDto;
 }

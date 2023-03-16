@@ -74,6 +74,7 @@ class Handler extends ExceptionHandler
     {
         return match (true) {
             $e instanceof AuthenticationException => Response::HTTP_FORBIDDEN,
+            method_exists($e, 'getStatusCode') => $e->getStatusCode(),
             default => Response::HTTP_BAD_REQUEST
         };
     }

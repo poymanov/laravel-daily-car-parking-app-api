@@ -19,4 +19,14 @@ class VehicleBuilder
     {
         return '/api/v1/vehicles';
     }
+
+    /**
+     * @param string $id
+     *
+     * @return string
+     */
+    public function show(string $id): string
+    {
+        return '/api/v1/vehicles/' . $id;
+    }
 }

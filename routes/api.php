@@ -37,4 +37,4 @@ Route::group([
     Route::patch('password', 'updatePassword')->name('updatePassword');
 });
 
-Route::apiResource('v1/vehicles', VehicleController::class)->middleware('auth:sanctum')->only(['store', 'index']);
+Route::apiResource('v1/vehicles', VehicleController::class)->middleware('auth:sanctum')->only(['store', 'index', 'show']);

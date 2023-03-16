@@ -4,6 +4,8 @@ namespace App\Services\Vehicle\Contracts;
 
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 interface VehicleRepositoryContract
 {
@@ -22,4 +24,12 @@ interface VehicleRepositoryContract
      * @return VehicleDto[]
      */
     public function findAllByUserId(int $userId): array;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return VehicleDto
+     * @throws VehicleNotFoundByIdException
+     */
+    public function getOneById(Uuid $id): VehicleDto;
 }

@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Vehicle\StoreRequest;
 use App\Services\Vehicle\Contracts\VehicleDtoFormatterContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
+use App\Services\Vehicle\Exceptions\VehicleNotBelongsToUserException;
+use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class VehicleController extends Controller
@@ -58,6 +63,28 @@ class VehicleController extends Controller
             $vehiclesFormatted = $this->vehicleDtoFormatter->fromArrayToArray($vehicles);
 
             return response()->json($vehiclesFormatted);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function show(Request $request, string $id): JsonResponse
+    {
+        try {
+            $authUserId = $this->getAuthUserId($request);
+
+            $vehicleId = Uuid::make($id);
+
+            $vehicle = $this->vehicleService->getOneByIdAndUserId($vehicleId, $authUserId);
+
+            $vehicleFormatted = $this->vehicleDtoFormatter->toArray($vehicle);
+
+            return response()->json($vehicleFormatted);
+        } catch (VehicleNotFoundByIdException $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        } catch (VehicleNotBelongsToUserException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
         } catch (Throwable $e) {
             Log::error($e->getMessage());
             throw $e;

@@ -2,16 +2,20 @@
 
 namespace App\Services\Vehicle\Services;
 
-use App\Enums\CacheKeysEnum;
-use App\Enums\CacheTagsEnum;
+use App\Services\Vehicle\Contracts\VehicleCacheKeysServiceContract;
 use App\Services\Vehicle\Contracts\VehicleCacheServiceContract;
+use App\Services\Vehicle\Contracts\VehicleCacheTagsServiceContract;
+use App\Services\Vehicle\Dtos\VehicleDto;
 use Closure;
 use Illuminate\Cache\Repository;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class VehicleCacheService implements VehicleCacheServiceContract
 {
     public function __construct(
         private readonly Repository $cacheService,
+        private readonly VehicleCacheTagsServiceContract $vehicleCacheTagsService,
+        private readonly VehicleCacheKeysServiceContract $vehicleCacheKeysService,
         private readonly int $cacheTtl
     ) {
     }
@@ -21,36 +25,26 @@ class VehicleCacheService implements VehicleCacheServiceContract
      */
     public function forgetAll(int $userId): void
     {
-        $this->cacheService->tags($this->getCacheTags($userId))->flush();
+        $this->cacheService->tags($this->vehicleCacheTagsService->getCacheTags($userId))->flush();
     }
 
     /**
      * @inheritDoc
      */
-    public function rememberAndGetAll(int $userId, Closure $closure): array
+    public function rememberAndGetAllByUserId(int $userId, Closure $closure): array
     {
         //@phpstan-ignore-next-line
-        return $this->cacheService->tags($this->getCacheTags($userId))
-            ->remember($this->getAllVehiclesCacheKey($userId), $this->cacheTtl, $closure);
+        return $this->cacheService->tags($this->vehicleCacheTagsService->getCacheTags($userId))
+            ->remember($this->vehicleCacheKeysService->getAllByUserId($userId), $this->cacheTtl, $closure);
     }
 
     /**
-     * @param int $userId
-     *
-     * @return string
+     * @inheritDoc
      */
-    private function getAllVehiclesCacheKey(int $userId): string
+    public function rememberAndGetOneById(Uuid $id, Closure $closure): VehicleDto
     {
-        return CacheKeysEnum::USER_ALL_VEHICLES->value . $userId;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return string[]
-     */
-    private function getCacheTags(int $userId): array
-    {
-        return [CacheTagsEnum::VEHICLES->value . $userId];
+        //@phpstan-ignore-next-line
+        return $this->cacheService->tags($this->vehicleCacheTagsService->getCacheTags())
+            ->remember($this->vehicleCacheKeysService->getOneById($id), $this->cacheTtl, $closure);
     }
 }
