@@ -6,7 +6,9 @@ use App\Models\Vehicle;
 use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Dtos\VehicleDto;
+use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
@@ -35,6 +37,19 @@ class VehicleRepository implements VehicleRepositoryContract
     /**
      * @inheritDoc
      */
+    public function update(Uuid $id, VehicleUpdateDto $vehicleUpdateDto): void
+    {
+        $vehicle = $this->getOneModelById($id);
+        $vehicle->plate_number = $vehicleUpdateDto->plateNumber;
+
+        if (!$vehicle->save()) {
+            throw new UpdateVehicleFailedException($id);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findAllByUserId(int $userId): array
     {
         $vehicles = Vehicle::whereUserId($userId)->latest()->get();
@@ -50,9 +65,9 @@ class VehicleRepository implements VehicleRepositoryContract
      */
     public function getOneById(Uuid $id): VehicleDto
     {
-        $user = $this->getOneModelById($id);
+        $vehicle = $this->getOneModelById($id);
 
-        return $this->vehicleDtoFactory->createFromModel($user);
+        return $this->vehicleDtoFactory->createFromModel($vehicle);
     }
 
     /**

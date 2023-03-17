@@ -3,7 +3,9 @@
 namespace App\Services\Vehicle\Contracts;
 
 use App\Services\Vehicle\Dtos\VehicleDto;
+use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\VehicleNotBelongsToUserException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -18,6 +20,18 @@ interface VehicleServiceContract
      * @throws CreateVehicleFailedException
      */
     public function create(int $userId, string $plateNumber): VehicleDto;
+
+    /**
+     * @param Uuid             $id
+     * @param int              $userId
+     * @param VehicleUpdateDto $vehicleUpdateDto
+     *
+     * @return void
+     * @throws VehicleNotBelongsToUserException
+     * @throws UpdateVehicleFailedException
+     * @throws VehicleNotFoundByIdException
+     */
+    public function updateByUserId(Uuid $id, int $userId, VehicleUpdateDto $vehicleUpdateDto): void;
 
     /**
      * @param int $userId

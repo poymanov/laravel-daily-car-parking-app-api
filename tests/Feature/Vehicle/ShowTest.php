@@ -34,7 +34,7 @@ test('not existed', function () {
 });
 
 /**
- * Попытка получения транспортного средства, которое не пренадлежит пользователю
+ * Попытка получения транспортного средства, которое не принадлежит пользователю
  */
 test('not belongs to user', function () {
     $vehicle = modelBuilderHelper()->vehicle->create();
@@ -63,7 +63,6 @@ test('success', function () {
     $response->assertOk();
 
     $response->assertJsonFragment([
-
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $vehicle->plate_number,
