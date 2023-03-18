@@ -23,10 +23,7 @@ class VehicleUserService implements VehicleUserServiceContract
     {
         $vehicle = $this->vehicleService->getOneById($id);
 
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
+        $this->checkBelongsToUser($vehicle, $userId);
 
         $this->vehicleService->update($id, $vehicleUpdateDto);
     }
@@ -38,10 +35,7 @@ class VehicleUserService implements VehicleUserServiceContract
     {
         $vehicle = $this->vehicleService->getOneById($id);
 
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
+        $this->checkBelongsToUser($vehicle, $userId);
 
         $this->vehicleService->delete($id);
     }
@@ -53,11 +47,25 @@ class VehicleUserService implements VehicleUserServiceContract
     {
         $vehicle = $this->vehicleService->getOneById($id);
 
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
+        $this->checkBelongsToUser($vehicle, $userId);
 
         return $vehicle;
+    }
+
+    /**
+     * Проверка, принадлежит ли транспортное средство пользователю
+     *
+     * @param VehicleDto $vehicle
+     * @param int        $userId
+     *
+     * @return void
+     * @throws VehicleNotBelongsToUserException
+     */
+    private function checkBelongsToUser(VehicleDto $vehicle, int $userId): void
+    {
+        // Если транспортное средство не принадлежит пользователю
+        if ($vehicle->userId !== $userId) {
+            throw new VehicleNotBelongsToUserException($vehicle->id, $userId);
+        }
     }
 }
