@@ -22,7 +22,7 @@ class VehicleRepository implements VehicleRepositoryContract
     /**
      * @inheritDoc
      */
-    public function create(int $userId, string $plateNumber): VehicleDto
+    public function create(int $userId, string $plateNumber): Uuid
     {
         $vehicle               = new Vehicle();
         $vehicle->user_id      = $userId;
@@ -32,7 +32,7 @@ class VehicleRepository implements VehicleRepositoryContract
             throw new CreateVehicleFailedException();
         }
 
-        return $this->vehicleDtoFactory->createFromModel($vehicle);
+        return Uuid::make($vehicle->id);
     }
 
     /**
@@ -71,10 +71,7 @@ class VehicleRepository implements VehicleRepositoryContract
     }
 
     /**
-     * @param Uuid $id
-     *
-     * @return VehicleDto
-     * @throws VehicleNotFoundByIdException
+     * @inheritDoc
      */
     public function getOneById(Uuid $id): VehicleDto
     {

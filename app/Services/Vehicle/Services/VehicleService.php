@@ -20,13 +20,13 @@ class VehicleService implements VehicleServiceContract
     /**
      * @inheritDoc
      */
-    public function create(int $userId, string $plateNumber): VehicleDto
+    public function create(int $userId, string $plateNumber): Uuid
     {
-        $createdVehicle = $this->vehicleRepository->create($userId, $plateNumber);
+        $createdVehicleId = $this->vehicleRepository->create($userId, $plateNumber);
 
         $this->cacheService->forgetAll();
 
-        return $createdVehicle;
+        return $createdVehicleId;
     }
 
     /**
@@ -40,7 +40,9 @@ class VehicleService implements VehicleServiceContract
     }
 
     /**
-     * @inheritDoc
+     * @param Uuid $id
+     *
+     * @return VehicleDto
      */
     public function getOneById(Uuid $id): VehicleDto
     {

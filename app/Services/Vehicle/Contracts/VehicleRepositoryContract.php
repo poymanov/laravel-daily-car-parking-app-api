@@ -16,10 +16,10 @@ interface VehicleRepositoryContract
      * @param int    $userId
      * @param string $plateNumber
      *
-     * @return VehicleDto
+     * @return Uuid
      * @throws CreateVehicleFailedException
      */
-    public function create(int $userId, string $plateNumber): VehicleDto;
+    public function create(int $userId, string $plateNumber): Uuid;
 
     /**
      * @param Uuid             $id

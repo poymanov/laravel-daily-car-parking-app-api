@@ -43,7 +43,9 @@ class VehicleController extends Controller
         try {
             $authUserId = $this->getAuthUserId($request);
 
-            $vehicle = $this->vehicleService->create($authUserId, $request->get('plate_number'));
+            $vehicleId = $this->vehicleService->create($authUserId, $request->get('plate_number'));
+
+            $vehicle = $this->vehicleService->getOneById($vehicleId);
 
             $vehicleFormatted = $this->vehicleDtoFormatter->toArray($vehicle);
 
