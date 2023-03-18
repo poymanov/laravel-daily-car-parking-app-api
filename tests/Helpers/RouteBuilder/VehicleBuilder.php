@@ -39,4 +39,14 @@ class VehicleBuilder
     {
         return '/api/v1/vehicles/' . $id;
     }
+
+    /**
+     * @param string $id
+     *
+     * @return string
+     */
+    public function delete(string $id): string
+    {
+        return '/api/v1/vehicles/' . $id;
+    }
 }

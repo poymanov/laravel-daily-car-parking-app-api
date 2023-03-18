@@ -8,6 +8,7 @@ use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\DeleteVehicleFailedException;
 use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -44,6 +45,18 @@ class VehicleRepository implements VehicleRepositoryContract
 
         if (!$vehicle->save()) {
             throw new UpdateVehicleFailedException($id);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(Uuid $id): void
+    {
+        $vehicle = $this->getOneModelById($id);
+
+        if (!$vehicle->delete()) {
+            throw new DeleteVehicleFailedException($id);
         }
     }
 

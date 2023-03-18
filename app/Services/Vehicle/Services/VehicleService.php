@@ -52,6 +52,25 @@ class VehicleService implements VehicleServiceContract
     /**
      * @inheritDoc
      */
+    public function deleteByUserId(Uuid $id, int $userId): void
+    {
+        $vehicle = $this->cacheService->rememberAndGetOneById($id, function () use ($id) {
+            return $this->vehicleRepository->getOneById($id);
+        });
+
+        // Если транспортное средство не принадлежит пользователю
+        if ($vehicle->userId !== $userId) {
+            throw new VehicleNotBelongsToUserException($id, $userId);
+        }
+
+        $this->vehicleRepository->delete($id);
+
+        $this->cacheService->forgetAll($userId);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findAllByUserId(int $userId): array
     {
         return $this->cacheService->rememberAndGetAllByUserId($userId, function () use ($userId) {

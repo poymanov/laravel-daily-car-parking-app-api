@@ -5,6 +5,7 @@ namespace App\Services\Vehicle\Contracts;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
+use App\Services\Vehicle\Exceptions\DeleteVehicleFailedException;
 use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -29,6 +30,15 @@ interface VehicleRepositoryContract
      * @throws VehicleNotFoundByIdException
      */
     public function update(Uuid $id, VehicleUpdateDto $vehicleUpdateDto): void;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return void
+     * @throws DeleteVehicleFailedException
+     * @throws VehicleNotFoundByIdException
+     */
+    public function delete(Uuid $id): void;
 
     /**
      * @param int $userId
