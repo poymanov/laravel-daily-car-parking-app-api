@@ -9,11 +9,9 @@ use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 interface VehicleCacheServiceContract
 {
     /**
-     * @param int $userId
-     *
      * @return void
      */
-    public function forgetAll(int $userId): void;
+    public function forgetAll(): void;
 
     /**
      * @param int     $userId

@@ -23,9 +23,9 @@ class VehicleCacheService implements VehicleCacheServiceContract
     /**
      * @inheritDoc
      */
-    public function forgetAll(int $userId): void
+    public function forgetAll(): void
     {
-        $this->cacheService->tags($this->vehicleCacheTagsService->getCacheTags($userId))->flush();
+        $this->cacheService->tags($this->vehicleCacheTagsService->getCacheTags())->flush();
     }
 
     /**

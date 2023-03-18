@@ -8,6 +8,7 @@ use App\Http\Requests\Vehicle\UpdateRequest;
 use App\Services\Vehicle\Contracts\VehicleDtoFormatterContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
 use App\Services\Vehicle\Contracts\VehicleUpdateDtoFactoryContract;
+use App\Services\Vehicle\Contracts\VehicleUserServiceContract;
 use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\VehicleNotBelongsToUserException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
@@ -24,6 +25,7 @@ class VehicleController extends Controller
 {
     public function __construct(
         private readonly VehicleServiceContract $vehicleService,
+        private readonly VehicleUserServiceContract $vehicleUserService,
         private readonly VehicleUpdateDtoFactoryContract $vehicleUpdateDtoFactory,
         private readonly VehicleDtoFormatterContract $vehicleDtoFormatter
     ) {
@@ -90,7 +92,7 @@ class VehicleController extends Controller
 
             $vehicleId = Uuid::make($id);
 
-            $vehicle = $this->vehicleService->getOneByIdAndUserId($vehicleId, $authUserId);
+            $vehicle = $this->vehicleUserService->getOneById($vehicleId, $authUserId);
 
             $vehicleFormatted = $this->vehicleDtoFormatter->toArray($vehicle);
 
@@ -124,9 +126,9 @@ class VehicleController extends Controller
 
             $vehicleUpdateDto = $this->vehicleUpdateDtoFactory->createFromParam($request->get('plate_number'));
 
-            $this->vehicleService->updateByUserId($vehicleId, $authUserId, $vehicleUpdateDto);
+            $this->vehicleUserService->update($vehicleId, $authUserId, $vehicleUpdateDto);
 
-            $vehicle = $this->vehicleService->getOneByIdAndUserId($vehicleId, $authUserId);
+            $vehicle = $this->vehicleUserService->getOneById($vehicleId, $authUserId);
 
             $vehicleFormatted = $this->vehicleDtoFormatter->toArray($vehicle);
 
@@ -158,7 +160,7 @@ class VehicleController extends Controller
 
             $vehicleId = Uuid::make($id);
 
-            $this->vehicleService->deleteByUserId($vehicleId, $authUserId);
+            $this->vehicleUserService->delete($vehicleId, $authUserId);
 
             return response()->noContent();
         } catch (VehicleNotFoundByIdException $e) {

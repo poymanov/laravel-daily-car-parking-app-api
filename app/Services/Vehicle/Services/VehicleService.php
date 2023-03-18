@@ -7,7 +7,6 @@ use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
-use App\Services\Vehicle\Exceptions\VehicleNotBelongsToUserException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class VehicleService implements VehicleServiceContract
@@ -25,7 +24,7 @@ class VehicleService implements VehicleServiceContract
     {
         $createdVehicle = $this->vehicleRepository->create($userId, $plateNumber);
 
-        $this->cacheService->forgetAll($userId);
+        $this->cacheService->forgetAll();
 
         return $createdVehicle;
     }
@@ -33,39 +32,21 @@ class VehicleService implements VehicleServiceContract
     /**
      * @inheritDoc
      */
-    public function updateByUserId(Uuid $id, int $userId, VehicleUpdateDto $vehicleUpdateDto): void
+    public function update(Uuid $id, VehicleUpdateDto $vehicleUpdateDto): void
     {
-        $vehicle = $this->cacheService->rememberAndGetOneById($id, function () use ($id) {
-            return $this->vehicleRepository->getOneById($id);
-        });
-
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
-
         $this->vehicleRepository->update($id, $vehicleUpdateDto);
 
-        $this->cacheService->forgetAll($userId);
+        $this->cacheService->forgetAll();
     }
 
     /**
      * @inheritDoc
      */
-    public function deleteByUserId(Uuid $id, int $userId): void
+    public function getOneById(Uuid $id): VehicleDto
     {
-        $vehicle = $this->cacheService->rememberAndGetOneById($id, function () use ($id) {
+        return $this->cacheService->rememberAndGetOneById($id, function () use ($id) {
             return $this->vehicleRepository->getOneById($id);
         });
-
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
-
-        $this->vehicleRepository->delete($id);
-
-        $this->cacheService->forgetAll($userId);
     }
 
     /**
@@ -81,17 +62,10 @@ class VehicleService implements VehicleServiceContract
     /**
      * @inheritDoc
      */
-    public function getOneByIdAndUserId(Uuid $id, int $userId): VehicleDto
+    public function delete(Uuid $id): void
     {
-        $vehicle = $this->cacheService->rememberAndGetOneById($id, function () use ($id) {
-            return $this->vehicleRepository->getOneById($id);
-        });
+        $this->vehicleRepository->delete($id);
 
-        // Если транспортное средство не принадлежит пользователю
-        if ($vehicle->userId !== $userId) {
-            throw new VehicleNotBelongsToUserException($id, $userId);
-        }
-
-        return $vehicle;
+        $this->cacheService->forgetAll();
     }
 }

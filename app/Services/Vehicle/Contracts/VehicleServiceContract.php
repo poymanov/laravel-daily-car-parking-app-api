@@ -7,7 +7,6 @@ use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
 use App\Services\Vehicle\Exceptions\DeleteVehicleFailedException;
 use App\Services\Vehicle\Exceptions\UpdateVehicleFailedException;
-use App\Services\Vehicle\Exceptions\VehicleNotBelongsToUserException;
 use App\Services\Vehicle\Exceptions\VehicleNotFoundByIdException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
@@ -24,41 +23,34 @@ interface VehicleServiceContract
 
     /**
      * @param Uuid             $id
-     * @param int              $userId
      * @param VehicleUpdateDto $vehicleUpdateDto
      *
      * @return void
-     * @throws VehicleNotBelongsToUserException
      * @throws UpdateVehicleFailedException
      * @throws VehicleNotFoundByIdException
      */
-    public function updateByUserId(Uuid $id, int $userId, VehicleUpdateDto $vehicleUpdateDto): void;
+    public function update(Uuid $id, VehicleUpdateDto $vehicleUpdateDto): void;
 
     /**
      * @param Uuid $id
-     * @param int  $userId
      *
-     * @return void
-     * @throws VehicleNotBelongsToUserException
-     * @throws DeleteVehicleFailedException
-     * @throws VehicleNotFoundByIdException
+     * @return VehicleDto
      */
-    public function deleteByUserId(Uuid $id, int $userId): void;
+    public function getOneById(Uuid $id): VehicleDto;
 
     /**
      * @param int $userId
      *
-     * @return VehicleDto[]
+     * @return array
      */
     public function findAllByUserId(int $userId): array;
 
     /**
      * @param Uuid $id
-     * @param int  $userId
      *
-     * @return VehicleDto
-     * @throws VehicleNotBelongsToUserException
+     * @return void
+     * @throws DeleteVehicleFailedException
      * @throws VehicleNotFoundByIdException
      */
-    public function getOneByIdAndUserId(Uuid $id, int $userId): VehicleDto;
+    public function delete(Uuid $id): void;
 }

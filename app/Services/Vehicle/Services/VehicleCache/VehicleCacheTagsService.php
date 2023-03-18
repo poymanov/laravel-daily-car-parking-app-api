@@ -14,12 +14,6 @@ class VehicleCacheTagsService implements VehicleCacheTagsServiceContract
      */
     public function getCacheTags(?int $userId = null): array
     {
-        $cacheTags = [CacheTagsEnum::VEHICLES->value];
-
-        if ($userId) {
-            $cacheTags[] = CacheTagsEnum::USER_VEHICLES->value . $userId;
-        }
-
-        return $cacheTags;
+        return [CacheTagsEnum::VEHICLES->value];
     }
 }
