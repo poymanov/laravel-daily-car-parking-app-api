@@ -2,6 +2,7 @@
 
 use App\Providers\UserServiceProvider;
 use App\Providers\VehicleServiceProvider;
+use App\Providers\ZoneServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -198,6 +199,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         UserServiceProvider::class,
         VehicleServiceProvider::class,
+        ZoneServiceProvider::class
 
     ],
 
