@@ -27,4 +27,14 @@ class ZoneService implements ZoneServiceContract
 
         return $id;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->zoneCacheService->rememberAndGetAll(function () {
+            return $this->zoneRepository->findAll();
+        });
+    }
 }

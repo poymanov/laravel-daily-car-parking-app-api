@@ -24,9 +24,7 @@ class VehicleDtoFactory implements VehicleDtoFactoryContract
     }
 
     /**
-     * @param Collection $models
-     *
-     * @return VehicleDto[]
+     * @inheritDoc
      */
     public function createFromModels(Collection $models): array
     {

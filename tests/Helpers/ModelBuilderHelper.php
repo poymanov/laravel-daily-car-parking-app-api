@@ -4,6 +4,7 @@ namespace Tests\Helpers;
 
 use Tests\Helpers\ModelBuilder\UserBuilder;
 use Tests\Helpers\ModelBuilder\VehicleBuilder;
+use Tests\Helpers\ModelBuilder\ZoneBuilder;
 
 class ModelBuilderHelper
 {
@@ -13,10 +14,13 @@ class ModelBuilderHelper
 
     public VehicleBuilder $vehicle;
 
+    public ZoneBuilder $zone;
+
     private function __construct()
     {
         $this->user    = new UserBuilder();
         $this->vehicle = new VehicleBuilder();
+        $this->zone    = new ZoneBuilder();
     }
 
     /**
