@@ -40,7 +40,7 @@ class VehicleRepository implements VehicleRepositoryContract
      */
     public function update(Uuid $id, VehicleUpdateDto $vehicleUpdateDto): void
     {
-        $vehicle = $this->getOneModelById($id);
+        $vehicle               = $this->getOneModelById($id);
         $vehicle->plate_number = $vehicleUpdateDto->plateNumber;
 
         if (!$vehicle->save()) {
@@ -96,12 +96,12 @@ class VehicleRepository implements VehicleRepositoryContract
      */
     private function getOneModelById(Uuid $id): Vehicle
     {
-        $user = Vehicle::find($id->value());
+        $vehicle = Vehicle::find($id->value());
 
-        if (is_null($user)) {
+        if (is_null($vehicle)) {
             throw new VehicleNotFoundByIdException($id);
         }
 
-        return $user;
+        return $vehicle;
     }
 }

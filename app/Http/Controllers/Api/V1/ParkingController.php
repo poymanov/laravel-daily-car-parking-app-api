@@ -8,6 +8,7 @@ use App\Services\Parking\Contracts\ParkingServiceContract;
 use App\Services\Parking\Contracts\ParkingStartDtoFactoryContract;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 use Throwable;
 
 class ParkingController extends Controller
@@ -18,6 +19,16 @@ class ParkingController extends Controller
     ) {
     }
 
+    /**
+     * @param StartRequest $request
+     *
+     * @return Response
+     * @throws Throwable
+     * @throws \App\Services\Parking\Exceptions\StartParkingFailedException
+     * @throws \App\Services\Parking\Exceptions\ParkingAlreadyStartedException
+     * @throws \App\Services\Parking\Exceptions\VehicleNotBelongsToUserException
+     * @throws \App\Services\Parking\Exceptions\ZoneNotExistsException
+     */
     public function start(StartRequest $request): Response
     {
         try {
@@ -29,6 +40,22 @@ class ParkingController extends Controller
             );
 
             $this->parkingService->start($authUserId, $parkingStartDto);
+
+            return response()->noContent();
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function stop(string $id): Response
+    {
+        try {
+            $authUserId = $this->getAuthUserId(request());
+
+            $parkingId = Uuid::make($id);
+
+            $this->parkingService->stop($parkingId, $authUserId);
 
             return response()->noContent();
         } catch (Throwable $e) {

@@ -56,4 +56,5 @@ Route::group([
     'middleware' => 'auth:sanctum',
 ], function () {
     Route::post('', 'start')->name('start');
+    Route::patch('{id}', 'stop')->name('stop');
 });
