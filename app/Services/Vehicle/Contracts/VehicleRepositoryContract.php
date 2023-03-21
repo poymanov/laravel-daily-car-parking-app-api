@@ -54,4 +54,12 @@ interface VehicleRepositoryContract
      * @throws VehicleNotFoundByIdException
      */
     public function getOneById(Uuid $id): VehicleDto;
+
+    /**
+     * @param Uuid $id
+     * @param int  $userId
+     *
+     * @return bool
+     */
+    public function isBelongsToUser(Uuid $id, int $userId): bool;
 }

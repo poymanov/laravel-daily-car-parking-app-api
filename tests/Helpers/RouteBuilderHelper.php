@@ -3,6 +3,7 @@
 namespace Tests\Helpers;
 
 use Tests\Helpers\RouteBuilder\AuthBuilder;
+use Tests\Helpers\RouteBuilder\ParkingBuilder;
 use Tests\Helpers\RouteBuilder\ProfileBuilder;
 use Tests\Helpers\RouteBuilder\VehicleBuilder;
 use Tests\Helpers\RouteBuilder\ZoneBuilder;
@@ -19,12 +20,15 @@ class RouteBuilderHelper
 
     public ZoneBuilder $zone;
 
+    public ParkingBuilder $parking;
+
     private function __construct()
     {
         $this->auth    = new AuthBuilder();
         $this->profile = new ProfileBuilder();
         $this->vehicle = new VehicleBuilder();
         $this->zone    = new ZoneBuilder();
+        $this->parking = new ParkingBuilder();
     }
 
     public static function getInstance(): RouteBuilderHelper

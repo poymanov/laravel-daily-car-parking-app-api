@@ -81,6 +81,14 @@ class VehicleRepository implements VehicleRepositoryContract
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isBelongsToUser(Uuid $id, int $userId): bool
+    {
+        return Vehicle::whereId($id->value())->whereUserId($userId)->exists();
+    }
+
+    /**
      * @param Uuid $id
      *
      * @return Vehicle

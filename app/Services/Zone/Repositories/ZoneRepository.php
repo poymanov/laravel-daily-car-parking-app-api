@@ -41,4 +41,12 @@ class ZoneRepository implements ZoneRepositoryContract
 
         return $this->zoneDtoFactory->createFromModels($zones);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(Uuid $id): bool
+    {
+        return Zone::whereId($id->value())->exists();
+    }
 }

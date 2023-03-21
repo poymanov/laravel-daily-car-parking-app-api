@@ -53,4 +53,12 @@ interface VehicleServiceContract
      * @throws VehicleNotFoundByIdException
      */
     public function delete(Uuid $id): void;
+
+    /**
+     * @param Uuid $id
+     * @param int  $userId
+     *
+     * @return bool
+     */
+    public function isBelongsToUser(Uuid $id, int $userId): bool;
 }

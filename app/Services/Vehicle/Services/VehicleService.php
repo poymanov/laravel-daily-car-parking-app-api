@@ -70,4 +70,12 @@ class VehicleService implements VehicleServiceContract
 
         $this->cacheService->forgetAll();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isBelongsToUser(Uuid $id, int $userId): bool
+    {
+        return $this->vehicleRepository->isBelongsToUser($id, $userId);
+    }
 }

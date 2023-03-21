@@ -37,4 +37,12 @@ class ZoneService implements ZoneServiceContract
             return $this->zoneRepository->findAll();
         });
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(Uuid $id): bool
+    {
+        return $this->zoneRepository->isExistsById($id);
+    }
 }

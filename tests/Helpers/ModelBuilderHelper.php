@@ -2,6 +2,7 @@
 
 namespace Tests\Helpers;
 
+use Tests\Helpers\ModelBuilder\ParkingBuilder;
 use Tests\Helpers\ModelBuilder\UserBuilder;
 use Tests\Helpers\ModelBuilder\VehicleBuilder;
 use Tests\Helpers\ModelBuilder\ZoneBuilder;
@@ -16,11 +17,14 @@ class ModelBuilderHelper
 
     public ZoneBuilder $zone;
 
+    public ParkingBuilder $parking;
+
     private function __construct()
     {
         $this->user    = new UserBuilder();
         $this->vehicle = new VehicleBuilder();
         $this->zone    = new ZoneBuilder();
+        $this->parking = new ParkingBuilder();
     }
 
     /**

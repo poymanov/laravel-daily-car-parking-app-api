@@ -21,4 +21,11 @@ interface ZoneServiceContract
      * @return ZoneDto[]
      */
     public function findAll(): array;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return bool
+     */
+    public function isExistsById(Uuid $id): bool;
 }

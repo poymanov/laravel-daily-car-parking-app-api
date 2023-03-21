@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ParkingController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\VehicleController;
 use App\Http\Controllers\Api\V1\ZoneController;
@@ -46,4 +47,13 @@ Route::group([
     'controller' => ZoneController::class,
 ], function () {
     Route::get('', 'index')->name('index');
+});
+
+Route::group([
+    'prefix'     => 'v1/parkings',
+    'as'         => 'parking.',
+    'controller' => ParkingController::class,
+    'middleware' => 'auth:sanctum',
+], function () {
+    Route::post('', 'start')->name('start');
 });
