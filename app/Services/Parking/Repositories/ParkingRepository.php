@@ -3,7 +3,9 @@
 namespace App\Services\Parking\Repositories;
 
 use App\Models\Parking;
+use App\Services\Parking\Contracts\ParkingDtoFactoryContract;
 use App\Services\Parking\Contracts\ParkingRepositoryContract;
+use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Parking\Dtos\ParkingStartDto;
 use App\Services\Parking\Exceptions\StartParkingFailedException;
 use App\Services\Parking\Exceptions\ParkingNotFoundByIdException;
@@ -12,6 +14,11 @@ use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ParkingRepository implements ParkingRepositoryContract
 {
+    public function __construct(private readonly ParkingDtoFactoryContract $parkingDtoFactory)
+    {
+    }
+
+
     /**
      * @inheritDoc
      */
@@ -74,6 +81,19 @@ class ParkingRepository implements ParkingRepositoryContract
         if (!$parking->save()) {
             throw new StopParkingFailedException($id);
         }
+    }
+
+    /**
+     * @param Uuid $id
+     *
+     * @return ParkingDto
+     * @throws ParkingNotFoundByIdException
+     */
+    public function getOneById(Uuid $id): ParkingDto
+    {
+        $parking = $this->getOneModelById($id);
+
+        return $this->parkingDtoFactory->createFromModel($parking);
     }
 
     /**

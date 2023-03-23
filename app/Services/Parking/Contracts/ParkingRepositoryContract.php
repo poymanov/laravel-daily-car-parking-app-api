@@ -2,6 +2,7 @@
 
 namespace App\Services\Parking\Contracts;
 
+use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Parking\Dtos\ParkingStartDto;
 use App\Services\Parking\Exceptions\ParkingNotFoundByIdException;
 use App\Services\Parking\Exceptions\StartParkingFailedException;
@@ -57,4 +58,12 @@ interface ParkingRepositoryContract
      * @throws StopParkingFailedException
      */
     public function stop(Uuid $id): void;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return ParkingDto
+     * @throws ParkingNotFoundByIdException
+     */
+    public function getOneById(Uuid $id): ParkingDto;
 }

@@ -21,4 +21,14 @@ class ParkingBuilder
     {
         return '/api/v1/parkings/' . $id;
     }
+
+    /**
+     * @param string $id
+     *
+     * @return string
+     */
+    public function show(string $id): string
+    {
+        return '/api/v1/parkings/' . $id;
+    }
 }

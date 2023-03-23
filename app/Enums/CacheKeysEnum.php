@@ -9,4 +9,6 @@ enum CacheKeysEnum: string
     case VEHICLE = 'vehicle-';
 
     case ZONES = 'zones';
+
+    case PARKING = 'parking-';
 }

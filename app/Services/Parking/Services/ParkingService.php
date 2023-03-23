@@ -2,12 +2,13 @@
 
 namespace App\Services\Parking\Services;
 
+use App\Services\Parking\Contracts\ParkingCacheServiceContract;
 use App\Services\Parking\Contracts\ParkingRepositoryContract;
 use App\Services\Parking\Contracts\ParkingServiceContract;
+use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Parking\Dtos\ParkingStartDto;
 use App\Services\Parking\Exceptions\ParkingAlreadyStartedException;
 use App\Services\Parking\Exceptions\ParkingAlreadyStoppedException;
-use App\Services\Parking\Exceptions\ParkingNotBelongsToUserException;
 use App\Services\Parking\Exceptions\ParkingNotFoundByIdException;
 use App\Services\Parking\Exceptions\VehicleNotBelongsToUserException;
 use App\Services\Parking\Exceptions\ZoneNotExistsException;
@@ -20,7 +21,8 @@ class ParkingService implements ParkingServiceContract
     public function __construct(
         private readonly ZoneServiceContract $zoneService,
         private readonly VehicleServiceContract $vehicleService,
-        private readonly ParkingRepositoryContract $parkingRepository
+        private readonly ParkingRepositoryContract $parkingRepository,
+        private readonly ParkingCacheServiceContract $parkingCacheService
     ) {
     }
 
@@ -45,21 +47,18 @@ class ParkingService implements ParkingServiceContract
         }
 
         $this->parkingRepository->start($userId, $parkingStartDto);
+
+        $this->parkingCacheService->forgetAll();
     }
 
     /**
      * @inheritDoc
      */
-    public function stop(Uuid $id, int $userId): void
+    public function stop(Uuid $id): void
     {
         // Если парковка не найдена
         if (!$this->parkingRepository->isExistsById($id)) {
             throw new ParkingNotFoundByIdException($id);
-        }
-
-        // Если парковка не принадлежит пользователю
-        if (!$this->parkingRepository->isBelongsToUser($id, $userId)) {
-            throw new ParkingNotBelongsToUserException($id);
         }
 
         // Если парковка уже остановлена
@@ -68,5 +67,22 @@ class ParkingService implements ParkingServiceContract
         }
 
         $this->parkingRepository->stop($id);
+
+        $this->parkingCacheService->forgetAll();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOneById(Uuid $id): ParkingDto
+    {
+        // Если парковка не найдена
+        if (!$this->parkingRepository->isExistsById($id)) {
+            throw new ParkingNotFoundByIdException($id);
+        }
+
+        return $this->parkingCacheService->rememberAndGetOneById($id, function () use ($id) {
+            return $this->parkingRepository->getOneById($id);
+        });
     }
 }

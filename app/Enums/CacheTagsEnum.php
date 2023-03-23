@@ -6,5 +6,7 @@ enum CacheTagsEnum: string
 {
     case VEHICLES = 'vehicles';
 
-    case ZONES = 'zones-';
+    case ZONES = 'zones';
+
+    case PARKINGS = 'parkings';
 }

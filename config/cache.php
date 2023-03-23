@@ -110,5 +110,6 @@ return [
     'ttl' => [
         'vehicles' => env('CACHE_TTL_VEHICLES', 3600),
         'zones' => env('CACHE_TTL_ZONES', 3600),
+        'parkings' => env('CACHE_TTL_PARKINGS', 3600),
     ],
 ];

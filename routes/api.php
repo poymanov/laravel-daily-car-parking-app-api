@@ -57,4 +57,5 @@ Route::group([
 ], function () {
     Route::post('', 'start')->name('start');
     Route::patch('{id}', 'stop')->name('stop');
+    Route::get('{id}', 'show')->name('show');
 });

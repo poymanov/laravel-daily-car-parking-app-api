@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Parking\StartRequest;
+use App\Services\Parking\Contracts\ParkingDtoFormatterContract;
 use App\Services\Parking\Contracts\ParkingServiceContract;
 use App\Services\Parking\Contracts\ParkingStartDtoFactoryContract;
+use App\Services\Parking\Contracts\ParkingUserServiceContract;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -15,7 +18,9 @@ class ParkingController extends Controller
 {
     public function __construct(
         private readonly ParkingStartDtoFactoryContract $parkingStartDtoFactory,
-        private readonly ParkingServiceContract $parkingService
+        private readonly ParkingServiceContract $parkingService,
+        private readonly ParkingDtoFormatterContract $parkingDtoFormatter,
+        private readonly ParkingUserServiceContract $parkingUserService
     ) {
     }
 
@@ -48,6 +53,16 @@ class ParkingController extends Controller
         }
     }
 
+    /**
+     * @param string $id
+     *
+     * @return Response
+     * @throws Throwable
+     * @throws \App\Services\Parking\Exceptions\ParkingAlreadyStoppedException
+     * @throws \App\Services\Parking\Exceptions\ParkingNotBelongsToUserException
+     * @throws \App\Services\Parking\Exceptions\ParkingNotFoundByIdException
+     * @throws \App\Services\Parking\Exceptions\StopParkingFailedException
+     */
     public function stop(string $id): Response
     {
         try {
@@ -55,9 +70,35 @@ class ParkingController extends Controller
 
             $parkingId = Uuid::make($id);
 
-            $this->parkingService->stop($parkingId, $authUserId);
+            $this->parkingUserService->stop($parkingId, $authUserId);
 
             return response()->noContent();
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return JsonResponse
+     * @throws Throwable
+     * @throws \App\Services\Parking\Exceptions\ParkingNotBelongsToUserException
+     * @throws \App\Services\Parking\Exceptions\ParkingNotFoundByIdException
+     */
+    public function show(string $id): JsonResponse
+    {
+        try {
+            $authUserId = $this->getAuthUserId(request());
+
+            $parkingId = Uuid::make($id);
+
+            $parking = $this->parkingUserService->getOneById($parkingId, $authUserId);
+
+            $parkingFormatted = $this->parkingDtoFormatter->toArray($parking);
+
+            return response()->json($parkingFormatted);
         } catch (Throwable $e) {
             Log::error($e->getMessage());
             throw $e;
