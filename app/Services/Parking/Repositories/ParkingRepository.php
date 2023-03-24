@@ -7,6 +7,7 @@ use App\Services\Parking\Contracts\ParkingDtoFactoryContract;
 use App\Services\Parking\Contracts\ParkingRepositoryContract;
 use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Parking\Dtos\ParkingStartDto;
+use App\Services\Parking\Exceptions\ParkingUpdateTotalPriceFailedException;
 use App\Services\Parking\Exceptions\StartParkingFailedException;
 use App\Services\Parking\Exceptions\ParkingNotFoundByIdException;
 use App\Services\Parking\Exceptions\StopParkingFailedException;
@@ -84,16 +85,26 @@ class ParkingRepository implements ParkingRepositoryContract
     }
 
     /**
-     * @param Uuid $id
-     *
-     * @return ParkingDto
-     * @throws ParkingNotFoundByIdException
+     * @inheritDoc
      */
     public function getOneById(Uuid $id): ParkingDto
     {
         $parking = $this->getOneModelById($id);
 
         return $this->parkingDtoFactory->createFromModel($parking);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateTotalPrice(Uuid $id, int $totalPrice): void
+    {
+        $parking = $this->getOneModelById($id);
+        $parking->total_price = $totalPrice;
+
+        if (!$parking->save()) {
+            throw new ParkingUpdateTotalPriceFailedException($id);
+        }
     }
 
     /**

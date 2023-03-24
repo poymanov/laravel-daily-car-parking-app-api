@@ -5,6 +5,7 @@ namespace App\Services\Parking\Contracts;
 use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Parking\Dtos\ParkingStartDto;
 use App\Services\Parking\Exceptions\ParkingNotFoundByIdException;
+use App\Services\Parking\Exceptions\ParkingUpdateTotalPriceFailedException;
 use App\Services\Parking\Exceptions\StartParkingFailedException;
 use App\Services\Parking\Exceptions\StopParkingFailedException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -66,4 +67,14 @@ interface ParkingRepositoryContract
      * @throws ParkingNotFoundByIdException
      */
     public function getOneById(Uuid $id): ParkingDto;
+
+    /**
+     * @param Uuid $id
+     * @param int  $totalPrice
+     *
+     * @return void
+     * @throws ParkingNotFoundByIdException
+     * @throws ParkingUpdateTotalPriceFailedException
+     */
+    public function updateTotalPrice(Uuid $id, int $totalPrice): void;
 }

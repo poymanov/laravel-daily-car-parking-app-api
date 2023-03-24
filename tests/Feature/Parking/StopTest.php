@@ -95,7 +95,29 @@ test('success', function () {
     $response->assertNoContent();
 
     $this->assertDatabaseMissing('parkings', [
-        'id'         => $parking->id,
-        'stop_time'  => null,
+        'id'        => $parking->id,
+        'stop_time' => null,
+    ]);
+});
+
+/**
+ * Успешная остановка парковки и подсчет её итоговой стоимости
+ */
+test('success with calculation', function () {
+    $user = modelBuilderHelper()->user->create();
+
+    $parking = modelBuilderHelper()->parking->create(['user_id' => $user->id, 'start_time' => now()]);
+
+    Sanctum::actingAs($user);
+
+    $this->travel(1)->hour();
+
+    $response = $this->patchJson(routeBuilderHelper()->parking->stop($parking->id));
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseHas('parkings', [
+        'id'          => $parking->id,
+        'total_price' => $parking->zone->price_per_hour,
     ]);
 });

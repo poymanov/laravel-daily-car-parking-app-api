@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Parking\Contracts\ParkingCacheKeysServiceContract;
 use App\Services\Parking\Contracts\ParkingCacheServiceContract;
 use App\Services\Parking\Contracts\ParkingCacheTagsServiceContract;
+use App\Services\Parking\Contracts\ParkingCalculationServiceContract;
 use App\Services\Parking\Contracts\ParkingDtoFactoryContract;
 use App\Services\Parking\Contracts\ParkingDtoFormatterContract;
 use App\Services\Parking\Contracts\ParkingRepositoryContract;
@@ -18,6 +19,7 @@ use App\Services\Parking\Repositories\ParkingRepository;
 use App\Services\Parking\Services\ParkingCache\ParkingCacheKeysService;
 use App\Services\Parking\Services\ParkingCache\ParkingCacheTagsService;
 use App\Services\Parking\Services\ParkingCacheService;
+use App\Services\Parking\Services\ParkingCalculationService;
 use App\Services\Parking\Services\ParkingService;
 use App\Services\Parking\Services\ParkingUserService;
 use Illuminate\Cache\Repository;
@@ -38,6 +40,7 @@ class ParkingServiceProvider extends ServiceProvider
         $this->app->singleton(ParkingUserServiceContract::class, ParkingUserService::class);
         $this->app->singleton(ParkingCacheTagsServiceContract::class, ParkingCacheTagsService::class);
         $this->app->singleton(ParkingCacheKeysServiceContract::class, ParkingCacheKeysService::class);
+        $this->app->singleton(ParkingCalculationServiceContract::class, ParkingCalculationService::class);
 
         $this->app->singleton(ParkingCacheServiceContract::class, function () {
             return new ParkingCacheService(

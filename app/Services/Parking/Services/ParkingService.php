@@ -3,6 +3,7 @@
 namespace App\Services\Parking\Services;
 
 use App\Services\Parking\Contracts\ParkingCacheServiceContract;
+use App\Services\Parking\Contracts\ParkingCalculationServiceContract;
 use App\Services\Parking\Contracts\ParkingRepositoryContract;
 use App\Services\Parking\Contracts\ParkingServiceContract;
 use App\Services\Parking\Dtos\ParkingDto;
@@ -14,7 +15,9 @@ use App\Services\Parking\Exceptions\VehicleNotBelongsToUserException;
 use App\Services\Parking\Exceptions\ZoneNotExistsException;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
 use App\Services\Zone\Contracts\ZoneServiceContract;
+use Illuminate\Support\Facades\DB;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
+use Throwable;
 
 class ParkingService implements ParkingServiceContract
 {
@@ -22,7 +25,8 @@ class ParkingService implements ParkingServiceContract
         private readonly ZoneServiceContract $zoneService,
         private readonly VehicleServiceContract $vehicleService,
         private readonly ParkingRepositoryContract $parkingRepository,
-        private readonly ParkingCacheServiceContract $parkingCacheService
+        private readonly ParkingCacheServiceContract $parkingCacheService,
+        private readonly ParkingCalculationServiceContract $parkingCalculationService
     ) {
     }
 
@@ -66,9 +70,21 @@ class ParkingService implements ParkingServiceContract
             throw new ParkingAlreadyStoppedException($id);
         }
 
-        $this->parkingRepository->stop($id);
+        DB::beginTransaction();
 
-        $this->parkingCacheService->forgetAll();
+        try {
+            $this->parkingRepository->stop($id);
+
+            $this->parkingCalculationService->calculateTotalPrice($id);
+
+            $this->parkingCacheService->forgetAll();
+
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 
     /**
