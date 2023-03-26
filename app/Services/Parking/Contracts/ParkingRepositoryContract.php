@@ -77,4 +77,9 @@ interface ParkingRepositoryContract
      * @throws ParkingUpdateTotalPriceFailedException
      */
     public function updateTotalPrice(Uuid $id, int $totalPrice): void;
+
+    /**
+     * @return ParkingDto[]
+     */
+    public function findAllActive(): array;
 }

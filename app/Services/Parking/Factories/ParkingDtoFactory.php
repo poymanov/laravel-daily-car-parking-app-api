@@ -7,6 +7,7 @@ use App\Services\Parking\Contracts\ParkingDtoFactoryContract;
 use App\Services\Parking\Dtos\ParkingDto;
 use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Zone\Contracts\ZoneDtoFactoryContract;
+use Illuminate\Support\Collection;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ParkingDtoFactory implements ParkingDtoFactoryContract
@@ -18,9 +19,7 @@ class ParkingDtoFactory implements ParkingDtoFactoryContract
     }
 
     /**
-     * @param Parking $parking
-     *
-     * @return ParkingDto
+     * @inheritDoc
      */
     public function createFromModel(Parking $parking): ParkingDto
     {
@@ -33,5 +32,19 @@ class ParkingDtoFactory implements ParkingDtoFactoryContract
         $parkingDto->totalPrice = $parking->total_price;
 
         return $parkingDto;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createFromModels(Collection $models): array
+    {
+        $dtos = [];
+
+        foreach ($models as $model) {
+            $dtos[] = $this->createFromModel($model);
+        }
+
+        return $dtos;
     }
 }

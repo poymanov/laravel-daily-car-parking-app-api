@@ -43,4 +43,9 @@ interface ParkingServiceContract
      * @throws ParkingNotFoundByIdException
      */
     public function getOneById(Uuid $id): ParkingDto;
+
+    /**
+     * @return ParkingDto[]
+     */
+    public function findAllActive(): array;
 }

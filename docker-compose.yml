@@ -39,6 +39,12 @@ services:
             - POSTGRES_MULTIPLE_DATABASES=db_telescope, db_test
         ports:
             - "5432:5432"
+    rabbit-mq:
+        image: rabbitmq:3.10.7-management-alpine
+        ports:
+            - "15672:15672"
+        volumes:
+            - rabbitmq_data:/data
     memcached:
         image: 'memcached:alpine'
     mailhog:
@@ -47,3 +53,4 @@ services:
             - "8025:8025"
 volumes:
     db:
+    rabbitmq_data:

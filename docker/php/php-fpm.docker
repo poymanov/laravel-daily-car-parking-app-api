@@ -7,7 +7,7 @@ RUN apk update && apk add --no-cache git unzip php-intl icu-dev bash freetype-de
     && git clone --branch release/$PHPREDIS_VERSION --depth 1 https://github.com/phpredis/phpredis /usr/src/php/ext/redis \
     && git clone --branch $XDEBUG_VERSION --depth 1 https://github.com/xdebug/xdebug.git /usr/src/php/ext/xdebug \
     && docker-php-ext-configure xdebug --enable-xdebug-dev \
-    && docker-php-ext-install mysqli pdo pdo_pgsql intl xdebug redis bcmath \
+    && docker-php-ext-install mysqli pdo pdo_pgsql intl xdebug redis bcmath sockets \
     && docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/ \
     && pecl install memcached \
     && docker-php-ext-enable memcached \

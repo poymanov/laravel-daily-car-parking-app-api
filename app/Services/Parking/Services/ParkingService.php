@@ -101,4 +101,12 @@ class ParkingService implements ParkingServiceContract
             return $this->parkingRepository->getOneById($id);
         });
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllActive(): array
+    {
+        return $this->parkingRepository->findAllActive();
+    }
 }

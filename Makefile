@@ -67,6 +67,9 @@ backend-seed:
 backend-generate-key:
 	docker-compose run --rm php-cli php artisan key:generate
 
+backend-run-queue:
+	docker-compose run --rm php-cli php artisan queue:work
+
 backend-pint:
 	docker-compose run --rm php-cli composer pint
 
