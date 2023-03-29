@@ -1,0 +1,615 @@
+openapi: 3.0.3
+info:
+  description: "Car Parking App Api"
+  version: "1"
+  title: "Car Parking App Api"
+tags:
+  - name: "auth"
+    description: "Аутентификация"
+  - name: "profile"
+    description: "Профиль пользователя"
+  - name: "zone"
+    description: "Зоны парковки"
+  - name: "vehicle"
+    description: "Транспортные средства"
+  - name: "parking"
+    description: "Парковки"
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /auth/register:
+    post:
+      tags:
+        - "auth"
+      summary: "Регистрация пользователя"
+      operationId: registration
+      requestBody:
+        $ref: '#/components/requestBodies/AuthRegistration'
+      responses:
+        '200':
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseAccessToken'
+        '400':
+          description: Ошибка выполнения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '422':
+          description: Ошибки валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response422'
+  /auth/login:
+    post:
+      tags:
+        - "auth"
+      summary: "Аутентификация пользователя"
+      operationId: login
+      requestBody:
+        $ref: '#/components/requestBodies/AuthLogin'
+      responses:
+        '201':
+          description: Успешная аутентификация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseAccessToken'
+        '400':
+          description: Ошибка выполнения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '422':
+          description: Ошибки валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response422'
+  /auth/logout:
+    post:
+      tags:
+        - "auth"
+      summary: "Завершение пользовательского сеанса"
+      operationId: logout
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '204':
+          description: "Успешное завершение пользовательского сеанса"
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+  /profile:
+    get:
+      tags:
+        - "profile"
+      summary: "Получение данных пользователя"
+      operationId: profile
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: "Успешное получение данных пользователя"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+    patch:
+      tags:
+        - "profile"
+      summary: "Изменение данных пользователя"
+      operationId: update
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/UserProfileUpdate'
+      responses:
+        '200':
+          description: "Успешное изменение данных пользователя"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileUpdated'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /profile/update:
+    patch:
+      tags:
+        - "profile"
+      summary: "Изменение пароля пользователя"
+      operationId: update-password
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/UserProfileUpdatePassword'
+      responses:
+        '204':
+          description: "Успешное изменение пароля пользователя"
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /zones:
+    get:
+      tags:
+        - "zone"
+      summary: "Зоны парковки"
+      operationId: index
+      responses:
+        '200':
+          description: "Успешное получение списка зон парковки"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZonesList'
+  /vehicles:
+    get:
+      tags:
+        - "vehicle"
+      summary: "Транспортные средства"
+      operationId: index
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: "Успешное получение списка транспортных средств"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehiclesList'
+    post:
+      tags:
+        - "vehicle"
+      summary: "Добавление транспортного средства"
+      operationId: create
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: "Успешное добавление транспортного средства"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+  /vehicles/{id}:
+    get:
+      tags:
+        - "vehicle"
+      summary: "Просмотр транспортного средства"
+      operationId: show
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID транспортного средства"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '200':
+          description: "Успешный просмотр транспортного средства"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+    patch:
+      tags:
+        - "vehicle"
+      summary: "Изменение данных транспортного средства"
+      operationId: update
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/VehicleUpdate'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID транспортного средства"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '200':
+          description: "Успешное изменение транспортного средства"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /parkings:
+    post:
+      tags:
+        - "parking"
+      summary: "Начало парковки транспортного средства"
+      operationId: start
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/ParkingStart'
+      responses:
+        '204':
+          description: "Успешное начало парковки транспортного средства"
+  /parkings/{id}:
+    patch:
+      tags:
+        - "parking"
+      summary: "Завершение парковки транспортного средства"
+      operationId: stop
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID парковки"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '204':
+          description: "Успешное завершение парковки транспортного средства"
+    get:
+      tags:
+        - "parking"
+      summary: "Получение данных о парковке транспортного средства"
+      operationId: show
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID парковки"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '200':
+          description: "Успешное получение данных о парковке"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parking'
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  requestBodies:
+    AuthRegistration:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthRegistrationBody'
+    AuthLogin:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthLoginBody'
+    UserProfileUpdate:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserProfileUpdate'
+    UserProfileUpdatePassword:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserProfileUpdatePassword'
+    VehicleUpdate:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VehicleUpdate'
+    ParkingStart:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ParkingStart'
+  schemas:
+    AuthRegistrationBody:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+      properties:
+        name:
+          type: string
+          title: Имя пользователя
+          example: Test
+        email:
+          type: string
+          title: Email пользователя
+          example: test@test.ru
+        password:
+          type: string
+          title: Пароль
+          example: password
+        password_confirmation:
+          type: string
+          title: Подтверждение пароля
+          example: password
+    AuthLoginBody:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          title: Email пользователя
+          example: test@test.ru
+        password:
+          type: string
+          title: Пароль
+          example: password
+    ResponseAccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+          title: "Токен аутентификации"
+          example: "9|8fV8DNaTm681w7QxRr60zHBATMVutlWjVoSLfbxI"
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          title: "ID пользователя"
+          example: 2
+        name:
+          type: string
+          title: "Имя пользователя"
+          example: "Test"
+        email:
+          type: string
+          title: "Email пользователя"
+          example: "test@test.ru"
+    UserProfileUpdated:
+      type: object
+      properties:
+        name:
+          type: string
+          title: "Имя пользователя"
+          example: "Test"
+        email:
+          type: string
+          title: "Email пользователя"
+          example: "test@test.ru"
+    UserProfileUpdate:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          title: "Имя пользователя"
+          example: "Test"
+        email:
+          type: string
+          title: "Email пользователя"
+          example: "test@test.ru"
+    UserProfileUpdatePassword:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+          title: Пароль
+          example: password
+    ZonesList:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            title: "ID зоны парковки"
+            example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+          name:
+            type: string
+            title: "Название зоны парковки"
+            example: "Red Zone"
+          price_per_hour:
+            type: integer
+            title: "Стоимость парковки в зоне (в центах)"
+            example: 100
+    VehiclesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Vehicle'
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: string
+          title: "ID транспортных средств"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+        name:
+          type: integer
+          title: "ID пользователя (владельца транспортного средства)"
+          example: 1
+        plate_number:
+          type: string
+          title: "Номер транспортного средства"
+          example: "000-111"
+    Parking:
+      type: object
+      properties:
+        id:
+          type: string
+          title: "ID парковки"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+        zone:
+          type: object
+          title: "Зона парковки"
+          properties:
+            name:
+              type: string
+              title: "Название зоны парковки"
+              example: "Red Zone"
+            price_per_hour:
+              type: integer
+              title: "Стоимость парковки в зоне (в центах)"
+              example: 100
+        vehicle:
+          type: object
+          title: "Транспортное средство"
+          properties:
+            plate_number:
+              type: string
+              title: "Номер транспортного средства"
+              example: "000-111"
+        start_time:
+          type: string
+          title: "Дата/время начала парковки"
+          example: "2023-03-25 11:39:51"
+        stop_time:
+          type: string
+          title: "Дата/время завершения парковки"
+          example: "2023-03-26 11:39:51"
+        total_price:
+          type: integer
+          title: "Общая стоимость парковки"
+          example: 100
+    VehicleUpdate:
+      type: object
+      required:
+        - plate_number
+      properties:
+        plate_number:
+          type: string
+          title: "Номер транспортного средства"
+          example: "000-111"
+    ParkingStart:
+      type: object
+      required:
+        - vehicle_id
+        - zone_id
+      properties:
+        vehicle_id:
+          type: string
+          title: "ID транспортного средства"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+        zone_id:
+          type: string
+          title: "ID зоны парковки"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+    Response400:
+      type: object
+      properties:
+        message:
+          type: string
+          title: "Сообщение об ошибке"
+          example: "Failed to create user"
+    Response404:
+      type: object
+      properties:
+        message:
+          type: string
+          title: "Сообщение об отсутствии объекта"
+          example: "User not found by id"
+    Response422:
+      type: object
+      properties:
+        message:
+          type: string
+          title: "Описание ошибок валидации"
+          example: "The email has already been taken."
+        errors:
+          type: object
+          title: Поля с ошибками
+          properties:
+            field:
+              type: array
+              title: "Название поля с ошибкой"
+              items:
+                type: string
+                example: "The email has already been taken."

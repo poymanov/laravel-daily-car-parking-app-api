@@ -51,6 +51,14 @@ services:
         image: 'mailhog/mailhog:latest'
         ports:
             - "8025:8025"
+    swagger:
+        image: 'swaggerapi/swagger-ui:v4.18.1'
+        ports:
+            - "8081:8080"
+        volumes:
+            - ./api-docs:/usr/share/nginx/html/docs
+        environment:
+            API_URL: docs/v1.yml
 volumes:
     db:
     rabbitmq_data:
