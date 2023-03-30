@@ -91,3 +91,6 @@ backend-ide-helper-meta:
 	docker-compose run --rm php-cli composer ide-helper-meta
 
 backend-ide-helper: backend-ide-helper-generate backend-ide-helper-models backend-ide-helper-meta
+
+backend-run-schedule:
+	docker-compose run --rm php-cli php artisan schedule:work
