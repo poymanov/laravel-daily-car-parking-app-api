@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
     nginx:
         build:
@@ -62,3 +62,7 @@ services:
 volumes:
     db:
     rabbitmq_data:
+networks:
+    default:
+        name: car-parking-app
+        external: true

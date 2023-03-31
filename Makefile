@@ -22,6 +22,9 @@ docker-pull:
 docker-build:
 	docker-compose build
 
+docker-create-network:
+	docker network create car-parking-app
+
 wait-db:
 	docker-compose run --rm php-cli wait-for-it db:5432 -t 60
 
