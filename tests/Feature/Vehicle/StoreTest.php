@@ -57,11 +57,13 @@ test('success', function () {
     $user = modelBuilderHelper()->user->create();
 
     $plateNumber = faker()->word;
+    $description = faker()->word();
 
     Sanctum::actingAs($user);
 
     $response = $this->postJson(routeBuilderHelper()->vehicle->store(), [
         'plate_number' => $plateNumber,
+        'description'  => $description,
     ]);
 
     $response->assertOk();
@@ -71,5 +73,6 @@ test('success', function () {
     $this->assertDatabaseHas('vehicles', [
         'user_id'      => $user->id,
         'plate_number' => $plateNumber,
+        'description'  => $description,
     ]);
 });

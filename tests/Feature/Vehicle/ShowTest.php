@@ -66,5 +66,6 @@ test('success', function () {
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $vehicle->plate_number,
+        'description' => $vehicle->description
     ]);
 });

@@ -5,6 +5,7 @@ namespace App\Services\Vehicle\Repositories;
 use App\Models\Vehicle;
 use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
+use App\Services\Vehicle\Dtos\VehicleCreateDto;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
@@ -22,11 +23,12 @@ class VehicleRepository implements VehicleRepositoryContract
     /**
      * @inheritDoc
      */
-    public function create(int $userId, string $plateNumber): Uuid
+    public function create(int $userId, VehicleCreateDto $vehicleCreateDto): Uuid
     {
         $vehicle               = new Vehicle();
         $vehicle->user_id      = $userId;
-        $vehicle->plate_number = $plateNumber;
+        $vehicle->plate_number = $vehicleCreateDto->plateNumber;
+        $vehicle->description  = $vehicleCreateDto->description;
 
         if (!$vehicle->save()) {
             throw new CreateVehicleFailedException();
@@ -42,6 +44,7 @@ class VehicleRepository implements VehicleRepositoryContract
     {
         $vehicle               = $this->getOneModelById($id);
         $vehicle->plate_number = $vehicleUpdateDto->plateNumber;
+        $vehicle->description  = $vehicleUpdateDto->description;
 
         if (!$vehicle->save()) {
             throw new UpdateVehicleFailedException($id);

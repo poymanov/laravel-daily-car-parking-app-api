@@ -24,6 +24,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'plate_number' => ['required', 'string', 'max:255', Rule::unique('vehicles')->ignore(request()->route('vehicle'))],
+            'description'  => ['nullable', 'string', 'max:255'],
         ];
     }
 }

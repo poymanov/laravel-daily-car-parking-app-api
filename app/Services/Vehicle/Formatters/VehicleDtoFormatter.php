@@ -16,6 +16,7 @@ class VehicleDtoFormatter implements VehicleDtoFormatterContract
             'id'           => $dto->id->value(),
             'user_id'      => $dto->userId,
             'plate_number' => $dto->plateNumber,
+            'description'  => $dto->description,
         ];
     }
 

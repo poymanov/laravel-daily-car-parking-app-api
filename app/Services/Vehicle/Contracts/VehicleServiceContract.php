@@ -2,6 +2,7 @@
 
 namespace App\Services\Vehicle\Contracts;
 
+use App\Services\Vehicle\Dtos\VehicleCreateDto;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use App\Services\Vehicle\Exceptions\CreateVehicleFailedException;
@@ -13,13 +14,13 @@ use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 interface VehicleServiceContract
 {
     /**
-     * @param int    $userId
-     * @param string $plateNumber
+     * @param int              $userId
+     * @param VehicleCreateDto $vehicleCreateDto
      *
      * @return Uuid
      * @throws CreateVehicleFailedException
      */
-    public function create(int $userId, string $plateNumber): Uuid;
+    public function create(int $userId, VehicleCreateDto $vehicleCreateDto): Uuid;
 
     /**
      * @param Uuid             $id

@@ -95,11 +95,13 @@ test('success', function () {
     $vehicle = modelBuilderHelper()->vehicle->create(['user_id' => $user->id]);
 
     $newPlateNumber = faker()->word;
+    $newDescription = faker()->word;
 
     Sanctum::actingAs($user);
 
     $response = $this->patchJson(routeBuilderHelper()->vehicle->update($vehicle->id), [
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 
     $response->assertOk();
@@ -108,12 +110,14 @@ test('success', function () {
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 
     $this->assertDatabaseHas('vehicles', [
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 });
 
@@ -125,11 +129,13 @@ test('success same data', function () {
     $vehicle = modelBuilderHelper()->vehicle->create(['user_id' => $user->id]);
 
     $newPlateNumber = $vehicle->plate_number;
+    $newDescription = $vehicle->description;
 
     Sanctum::actingAs($user);
 
     $response = $this->patchJson(routeBuilderHelper()->vehicle->update($vehicle->id), [
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 
     $response->assertOk();
@@ -138,11 +144,13 @@ test('success same data', function () {
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 
     $this->assertDatabaseHas('vehicles', [
         'id'           => $vehicle->id,
         'user_id'      => $user->id,
         'plate_number' => $newPlateNumber,
+        'description'  => $newDescription,
     ]);
 });

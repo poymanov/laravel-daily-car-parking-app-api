@@ -19,6 +19,7 @@ class VehicleFactory extends Factory
     {
         return [
             'plate_number' => $this->faker->word,
+            'description' => $this->faker->word,
             'user_id'      => User::factory(),
         ];
     }

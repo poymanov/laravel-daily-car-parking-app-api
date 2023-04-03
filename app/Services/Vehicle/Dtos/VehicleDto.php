@@ -11,4 +11,6 @@ class VehicleDto
     public int $userId;
 
     public string $plateNumber;
+
+    public ?string $description;
 }

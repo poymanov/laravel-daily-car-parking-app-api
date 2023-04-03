@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vehicle\StoreRequest;
 use App\Http\Requests\Vehicle\UpdateRequest;
+use App\Services\Vehicle\Contracts\VehicleCreateDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleDtoFormatterContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
 use App\Services\Vehicle\Contracts\VehicleUpdateDtoFactoryContract;
@@ -26,6 +27,7 @@ class VehicleController extends Controller
     public function __construct(
         private readonly VehicleServiceContract $vehicleService,
         private readonly VehicleUserServiceContract $vehicleUserService,
+        private readonly VehicleCreateDtoFactoryContract $vehicleCreateDtoFactory,
         private readonly VehicleUpdateDtoFactoryContract $vehicleUpdateDtoFactory,
         private readonly VehicleDtoFormatterContract $vehicleDtoFormatter
     ) {
@@ -43,7 +45,9 @@ class VehicleController extends Controller
         try {
             $authUserId = $this->getAuthUserId($request);
 
-            $vehicleId = $this->vehicleService->create($authUserId, $request->get('plate_number'));
+            $vehicleCreateDto = $this->vehicleCreateDtoFactory->createFromParam($request->get('plate_number'), $request->get('description'));
+
+            $vehicleId = $this->vehicleService->create($authUserId, $vehicleCreateDto);
 
             $vehicle = $this->vehicleService->getOneById($vehicleId);
 
@@ -126,7 +130,10 @@ class VehicleController extends Controller
 
             $vehicleId = Uuid::make($id);
 
-            $vehicleUpdateDto = $this->vehicleUpdateDtoFactory->createFromParam($request->get('plate_number'));
+            $vehicleUpdateDto = $this->vehicleUpdateDtoFactory->createFromParam(
+                $request->get('plate_number'),
+                $request->get('description')
+            );
 
             $this->vehicleUserService->update($vehicleId, $authUserId, $vehicleUpdateDto);
 

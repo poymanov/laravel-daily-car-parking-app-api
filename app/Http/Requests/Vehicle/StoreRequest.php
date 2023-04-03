@@ -24,6 +24,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'plate_number' => ['required', 'string', 'max:255', 'unique:' . Vehicle::class],
+            'description'  => ['nullable', 'string', 'max:255'],
         ];
     }
 }

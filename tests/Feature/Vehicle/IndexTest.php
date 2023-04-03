@@ -63,6 +63,7 @@ test('success', function () {
             'id'           => $vehicle->id,
             'user_id'      => $user->id,
             'plate_number' => $vehicle->plate_number,
+            'description'  => $vehicle->description,
         ],
     ]);
 });
@@ -75,7 +76,7 @@ test('success latest', function () {
 
     Sanctum::actingAs($user);
 
-    $vehicleFirst  = modelBuilderHelper()->vehicle->create(['user_id' => $user->id]);
+    $vehicleFirst = modelBuilderHelper()->vehicle->create(['user_id' => $user->id]);
 
     $this->travel(1)->hour();
 

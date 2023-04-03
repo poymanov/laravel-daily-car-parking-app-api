@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Services\Vehicle\Contracts\VehicleCacheKeysServiceContract;
 use App\Services\Vehicle\Contracts\VehicleCacheServiceContract;
 use App\Services\Vehicle\Contracts\VehicleCacheTagsServiceContract;
+use App\Services\Vehicle\Contracts\VehicleCreateDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleDtoFormatterContract;
 use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
 use App\Services\Vehicle\Contracts\VehicleUpdateDtoFactoryContract;
 use App\Services\Vehicle\Contracts\VehicleUserServiceContract;
+use App\Services\Vehicle\Factories\VehicleCreateDtoFactory;
 use App\Services\Vehicle\Factories\VehicleDtoFactory;
 use App\Services\Vehicle\Factories\VehicleUpdateDtoFactory;
 use App\Services\Vehicle\Formatters\VehicleDtoFormatter;
@@ -36,6 +38,7 @@ class VehicleServiceProvider extends ServiceProvider
         $this->app->singleton(VehicleServiceContract::class, VehicleService::class);
         $this->app->singleton(VehicleCacheTagsServiceContract::class, VehicleCacheTagsService::class);
         $this->app->singleton(VehicleCacheKeysServiceContract::class, VehicleCacheKeysService::class);
+        $this->app->singleton(VehicleCreateDtoFactoryContract::class, VehicleCreateDtoFactory::class);
         $this->app->singleton(VehicleUpdateDtoFactoryContract::class, VehicleUpdateDtoFactory::class);
         $this->app->singleton(VehicleUserServiceContract::class, VehicleUserService::class);
 

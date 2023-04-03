@@ -203,6 +203,8 @@ paths:
       operationId: create
       security:
         - bearerAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/VehicleCreate'
       responses:
         '200':
           description: "Успешное добавление транспортного средства"
@@ -384,6 +386,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/VehicleUpdate'
+    VehicleCreate:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VehicleCreate'
     ParkingStart:
       content:
         application/json:
@@ -530,6 +537,10 @@ components:
           type: string
           title: "Номер транспортного средства"
           example: "000-111"
+        description:
+          type: string
+          title: "Описание транспортного средства"
+          example: "Основная машина"
     Parking:
       type: object
       properties:
@@ -578,6 +589,23 @@ components:
           type: string
           title: "Номер транспортного средства"
           example: "000-111"
+        description:
+          type: string
+          title: "Описание транспортного средства"
+          example: "Основная машина"
+    VehicleCreate:
+      type: object
+      required:
+        - plate_number
+      properties:
+        plate_number:
+          type: string
+          title: "Номер транспортного средства"
+          example: "000-111"
+        description:
+          type: string
+          title: "Описание транспортного средства"
+          example: "Основная машина"
     ParkingStart:
       type: object
       required:

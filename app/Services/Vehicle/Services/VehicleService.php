@@ -5,6 +5,7 @@ namespace App\Services\Vehicle\Services;
 use App\Services\Vehicle\Contracts\VehicleCacheServiceContract;
 use App\Services\Vehicle\Contracts\VehicleRepositoryContract;
 use App\Services\Vehicle\Contracts\VehicleServiceContract;
+use App\Services\Vehicle\Dtos\VehicleCreateDto;
 use App\Services\Vehicle\Dtos\VehicleDto;
 use App\Services\Vehicle\Dtos\VehicleUpdateDto;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -20,9 +21,9 @@ class VehicleService implements VehicleServiceContract
     /**
      * @inheritDoc
      */
-    public function create(int $userId, string $plateNumber): Uuid
+    public function create(int $userId, VehicleCreateDto $vehicleCreateDto): Uuid
     {
-        $createdVehicleId = $this->vehicleRepository->create($userId, $plateNumber);
+        $createdVehicleId = $this->vehicleRepository->create($userId, $vehicleCreateDto);
 
         $this->cacheService->forgetAll();
 

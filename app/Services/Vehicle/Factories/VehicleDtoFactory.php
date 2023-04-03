@@ -19,6 +19,7 @@ class VehicleDtoFactory implements VehicleDtoFactoryContract
         $vehicleDto->id          = Uuid::make($vehicle->id);
         $vehicleDto->userId      = $vehicle->user_id;
         $vehicleDto->plateNumber = $vehicle->plate_number;
+        $vehicleDto->description = $vehicle->description;
 
         return $vehicleDto;
     }

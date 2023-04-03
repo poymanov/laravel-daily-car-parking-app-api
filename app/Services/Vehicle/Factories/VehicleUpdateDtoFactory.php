@@ -10,10 +10,11 @@ class VehicleUpdateDtoFactory implements VehicleUpdateDtoFactoryContract
     /**
      * @inheritDoc
      */
-    public function createFromParam(string $plateNumber): VehicleUpdateDto
+    public function createFromParam(string $plateNumber, ?string $description): VehicleUpdateDto
     {
         $vehicleUpdateDto = new VehicleUpdateDto();
         $vehicleUpdateDto->plateNumber = $plateNumber;
+        $vehicleUpdateDto->description = $description;
 
         return $vehicleUpdateDto;
     }

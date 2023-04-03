@@ -2,9 +2,9 @@
 
 namespace App\Services\Vehicle\Dtos;
 
-class VehicleUpdateDto
+class VehicleCreateDto
 {
     public string $plateNumber;
 
-    public ?string $description;
+    public string $description;
 }
