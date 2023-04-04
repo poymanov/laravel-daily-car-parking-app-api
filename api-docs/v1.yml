@@ -289,6 +289,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response404'
+    delete:
+      tags:
+        - "vehicle"
+      summary: "Удаление транспортного средства"
+      operationId: delete
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID транспортного средства"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '204':
+          description: "Успешное удаление транспортного средства"
+        '400':
+          description: "Ошибка выполнения"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: "Объект не найден"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
   /parkings:
     post:
       tags:
