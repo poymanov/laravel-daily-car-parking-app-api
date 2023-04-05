@@ -39,4 +39,12 @@ class ParkingBuilder
     {
         return '/api/v1/parkings/active';
     }
+
+    /**
+     * @return string
+     */
+    public function stopped(): string
+    {
+        return '/api/v1/parkings/stopped';
+    }
 }

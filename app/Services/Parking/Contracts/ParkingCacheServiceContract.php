@@ -20,4 +20,12 @@ interface ParkingCacheServiceContract
      * @return ParkingDto
      */
     public function rememberAndGetOneById(Uuid $id, Closure $closure): ParkingDto;
+
+    /**
+     * @param int     $userId
+     * @param Closure $closure
+     *
+     * @return ParkingDto[]
+     */
+    public function rememberAndGetAllStoppedByUserId(int $userId, Closure $closure): array;
 }

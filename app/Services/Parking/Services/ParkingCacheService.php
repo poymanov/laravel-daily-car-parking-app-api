@@ -37,4 +37,14 @@ class ParkingCacheService implements ParkingCacheServiceContract
         return $this->cacheService->tags($this->cacheTagsService->getCacheTags())
             ->remember($this->cacheKeysService->getOneById($id), $this->cacheTtl, $closure);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function rememberAndGetAllStoppedByUserId(int $userId, Closure $closure): array
+    {
+        //@phpstan-ignore-next-line
+        return $this->cacheService->tags($this->cacheTagsService->getCacheTags())
+            ->remember($this->cacheKeysService->getAllStoppedByUserId($userId), $this->cacheTtl, $closure);
+    }
 }

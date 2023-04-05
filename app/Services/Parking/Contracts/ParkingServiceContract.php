@@ -55,4 +55,11 @@ interface ParkingServiceContract
      * @return ParkingDto[]
      */
     public function findAllActiveByUserId(int $userId): array;
+
+    /**
+     * @param int $userId
+     *
+     * @return ParkingDto[]
+     */
+    public function findAllStoppedByUserId(int $userId): array;
 }

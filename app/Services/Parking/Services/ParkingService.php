@@ -117,4 +117,14 @@ class ParkingService implements ParkingServiceContract
     {
         return $this->parkingRepository->findAllActiveByUserId($userId);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllStoppedByUserId(int $userId): array
+    {
+        return $this->parkingCacheService->rememberAndGetAllStoppedByUserId($userId, function () use ($userId) {
+            return $this->parkingRepository->findAllStoppedByUserId($userId);
+        });
+    }
 }

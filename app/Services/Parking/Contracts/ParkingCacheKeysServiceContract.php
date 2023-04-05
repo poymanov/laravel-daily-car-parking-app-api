@@ -12,4 +12,11 @@ interface ParkingCacheKeysServiceContract
      * @return string
      */
     public function getOneById(Uuid $id): string;
+
+    /**
+     * @param int $userId
+     *
+     * @return string
+     */
+    public function getAllStoppedByUserId(int $userId): string;
 }

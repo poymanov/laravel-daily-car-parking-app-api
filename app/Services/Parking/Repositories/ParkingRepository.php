@@ -132,6 +132,20 @@ class ParkingRepository implements ParkingRepositoryContract
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findAllStoppedByUserId(int $userId): array
+    {
+        $parkings = Parking::whereNotNull('start_time')
+            ->whereNotNull('stop_time')
+            ->whereUserId($userId)
+            ->latest('stop_time')
+            ->get();
+
+        return $this->parkingDtoFactory->createFromModels($parkings);
+    }
+
+    /**
      * @param Uuid $id
      *
      * @return Parking

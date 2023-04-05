@@ -15,4 +15,12 @@ class ParkingCacheKeysService implements ParkingCacheKeysServiceContract
     {
         return CacheKeysEnum::PARKING->value . $id->value();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllStoppedByUserId(int $userId): string
+    {
+        return CacheKeysEnum::PARKING->value . 'stopped-user-id'  . $userId;
+    }
 }

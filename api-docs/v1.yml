@@ -393,14 +393,21 @@ paths:
       operationId: active
       security:
         - bearerAuth: [ ]
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: "ID парковки"
-          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '200':
+          description: "Успешное получение данных о парковках"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingsList'
+  /parkings/stopped:
+    get:
+      tags:
+        - "parking"
+      summary: "Получение завершенных парковок пользователя"
+      operationId: stopped
+      security:
+        - bearerAuth: [ ]
       responses:
         '200':
           description: "Успешное получение данных о парковках"
