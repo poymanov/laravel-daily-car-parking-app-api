@@ -104,4 +104,24 @@ class ParkingController extends Controller
             throw $e;
         }
     }
+
+    /**
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function active(): JsonResponse
+    {
+        try {
+            $authUserId = $this->getAuthUserId(request());
+
+            $parkings = $this->parkingService->findAllActiveByUserId($authUserId);
+
+            $parkingsFormatted = $this->parkingDtoFormatter->fromArrayToArray($parkings);
+
+            return response()->json($parkingsFormatted);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
 }

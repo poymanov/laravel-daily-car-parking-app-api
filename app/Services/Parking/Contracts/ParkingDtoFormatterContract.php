@@ -12,4 +12,11 @@ interface ParkingDtoFormatterContract
      * @return array
      */
     public function toArray(ParkingDto $dto): array;
+
+    /**
+     * @param array $dtos
+     *
+     * @return array
+     */
+    public function fromArrayToArray(array $dtos): array;
 }

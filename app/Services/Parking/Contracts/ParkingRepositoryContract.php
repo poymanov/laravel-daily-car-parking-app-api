@@ -82,4 +82,11 @@ interface ParkingRepositoryContract
      * @return ParkingDto[]
      */
     public function findAllActive(): array;
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function findAllActiveByUserId(int $userId): array;
 }

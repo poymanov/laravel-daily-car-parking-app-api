@@ -19,5 +19,7 @@ class ParkingDto
 
     public ?Carbon $stopTime;
 
+    public int $userId;
+
     public int $totalPrice;
 }

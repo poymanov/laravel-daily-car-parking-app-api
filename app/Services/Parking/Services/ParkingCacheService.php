@@ -21,7 +21,7 @@ class ParkingCacheService implements ParkingCacheServiceContract
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function forgetAll(): void
     {
@@ -29,10 +29,7 @@ class ParkingCacheService implements ParkingCacheServiceContract
     }
 
     /**
-     * @param Uuid    $id
-     * @param Closure $closure
-     *
-     * @return ParkingDto
+     * @inheritDoc
      */
     public function rememberAndGetOneById(Uuid $id, Closure $closure): ParkingDto
     {

@@ -118,6 +118,20 @@ class ParkingRepository implements ParkingRepositoryContract
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findAllActiveByUserId(int $userId): array
+    {
+        $parkings = Parking::whereNotNull('start_time')
+            ->whereNull('stop_time')
+            ->whereUserId($userId)
+            ->latest('start_time')
+            ->get();
+
+        return $this->parkingDtoFactory->createFromModels($parkings);
+    }
+
+    /**
      * @param Uuid $id
      *
      * @return Parking

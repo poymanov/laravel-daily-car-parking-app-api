@@ -29,6 +29,7 @@ class ParkingDtoFactory implements ParkingDtoFactoryContract
         $parkingDto->vehicle    = $this->vehicleDtoFactory->createFromModel($parking->vehicle);
         $parkingDto->startTime  = $parking->start_time;
         $parkingDto->stopTime   = $parking->stop_time;
+        $parkingDto->userId     = $parking->user_id;
         $parkingDto->totalPrice = $parking->total_price;
 
         return $parkingDto;

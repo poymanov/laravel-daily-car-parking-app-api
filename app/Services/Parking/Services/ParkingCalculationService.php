@@ -9,8 +9,9 @@ use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ParkingCalculationService implements ParkingCalculationServiceContract
 {
-    public function __construct(private readonly ParkingRepositoryContract $parkingRepository)
-    {
+    public function __construct(
+        private readonly ParkingRepositoryContract $parkingRepository
+    ) {
     }
 
     /**

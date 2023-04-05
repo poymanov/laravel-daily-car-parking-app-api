@@ -31,4 +31,12 @@ class ParkingBuilder
     {
         return '/api/v1/parkings/' . $id;
     }
+
+    /**
+     * @return string
+     */
+    public function active(): string
+    {
+        return '/api/v1/parkings/active';
+    }
 }

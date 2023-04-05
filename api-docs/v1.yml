@@ -385,6 +385,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response404'
+  /parkings/active:
+    get:
+      tags:
+        - "parking"
+      summary: "Получение активных парковок пользователя"
+      operationId: active
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID парковки"
+          example: "ddf6c76b-a99b-43ce-959c-7f243b684fe3"
+      responses:
+        '200':
+          description: "Успешное получение данных о парковках"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingsList'
 components:
   securitySchemes:
     bearerAuth:
@@ -548,6 +571,10 @@ components:
             type: integer
             title: "Стоимость парковки в зоне (в центах)"
             example: 100
+    ParkingsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Parking'
     VehiclesList:
       type: array
       items:
