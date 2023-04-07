@@ -3,13 +3,9 @@
 ![](docs/cover.png)
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg" alt="PHP" title="PHP" width="50" height="40"/>
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSql" title="PostgreSql" width="40" height="40"/>
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg" alt="Laravel" title="Laravel" width="40" height="40"/>
-
 <img src="https://pestphp.com/www/assets/logo.svg" alt="Pest PHP" title="Pest PHP" width="50" height="40"/>
-
 <img src="https://www.vectorlogo.zone/logos/docker/docker-tile.svg" alt="Docker" title="Docker" width="40" height="40"/>
 
 Приложение для парковки транспортного средства в выбранной зоне парковки (API).
